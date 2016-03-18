@@ -8,9 +8,9 @@
 
 
 class text_item : public QGraphicsTextItem
-{
+{    
 public:
-    text_item(QString& srt);
+    text_item(  QString& srt);
     virtual void focusOutEvent(QFocusEvent * event);
 signals:
     void new_value(double value);

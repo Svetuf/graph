@@ -1,4 +1,5 @@
 #include "line_item.h"
+#include "scene.h"
 
 // сгнал
 
@@ -9,7 +10,8 @@ line_item::line_item(point*& a, point*& b, QLineF u, QPen pen, QString _text) : 
     my_text = new text_item(_text);
    // my_text->setTextInteractionFlags(Qt::NoTextInteraction);
     my_text->opacityChanged();
-    QObject::connect(my_text, SIGNAL(new_value(double)), this, SLOT(get_value(double)));
+    my_text->setParentItem(this);
+    //QObject::connect(my_text, SIGNAL(new_value(double)), this, SLOT(get_value(double)));
     this->setLine(u);
     this->setPen(pen);
     this->show();
@@ -40,7 +42,12 @@ void line_item::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 void line_item::get_value(double val)
 {
-    emit _val(val,p_1,p_2);
+
+    qDebug()<<"WIN!!!!";
+
+    scena * myScene = dynamic_cast<scena *>(this->scene());
+    myScene->set_matrix(val,p_1,p_2);
+  //  emit _val(val,p_1,p_2);
 }
 
 //void line_item::_val(double v, point *&a, point *&b)

@@ -114,6 +114,7 @@ void scena::reDrawLines()
 
 void scena::set_matrix(double value, point *&a, point *&b)
 {
+    qDebug()<<"Value changed "<<value;
     matrix[get_num(a)][get_num(b)] = value;
     matrix[get_num(b)][get_num(a)] = value;
     for(int i = 0; i < lines.size(); i++)
