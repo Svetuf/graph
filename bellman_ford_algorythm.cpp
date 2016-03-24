@@ -1,5 +1,5 @@
 #include "bellman_ford_algorythm.h"
-
+// ya
 Bellman_Ford_algorythm::Bellman_Ford_algorythm()
 {
 

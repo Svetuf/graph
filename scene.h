@@ -12,17 +12,20 @@
 #include <QGraphicsSceneMouseEvent>
 #include <math.h>
 #include <QStyleOptionGraphicsItem>
-#include <line_item.h>
+#include "line_item.h"
 #include "point.h"
 #include "twopointsalhr.h"
 #include "diametr.h"
 #include "floyd_warshall_alhorythm.h"
+#include "simulated_annealing.h"
+#include "save_load.h"
 
 using namespace std;
 
 class scena : public QGraphicsScene
 {
     Q_OBJECT
+   friend class Save_Load;
 public:
     scena();
     scena(QWidget *parent = 0);
@@ -30,13 +33,14 @@ public:
     void drawLoops();
     void dia();
 
+
 private:
 
     QList<point*> points;
 
-    QList<line_item*>lines;
-
     QList<QList< double >> matrix;
+
+    QList<line_item*>lines;
 
     vector<QGraphicsItem*>dijkstra_lines;
 
@@ -53,8 +57,11 @@ private:
     alhorythm alh; //Dijkstra, A*
     diametr _d;    // diametr
     Floyd_Warshall_alhorythm f_w;   // Floyd alhorythm
+    simulated_annealing so;
 
     //
+
+    Save_Load sl;
 
     point* isPointSelected;
 
@@ -70,6 +77,7 @@ private:
     int get_num(point* p);
     double n(QPointF a, QPointF b);
     void do_it(point* a);
+    void draw_so(vector<int>s);
 
 signals:
 
@@ -80,8 +88,12 @@ public slots:
     void point_pressed(point* this_point);
     void point_move(point* this_point, QPointF position);
     void point_unpressed(point* this_point);
-    void set_matrix(double value,point *&a, point *&b);
+    void set_matrix(double value,point *&a, point *&b, line_item* _child);
     void skip();
+    void load(){ sl.load(points,matrix); }
+    void save(){ sl.save(points,matrix); }
+    void load_from(){ sl.load_fr(points,matrix); }
+    void save_as(){ sl.save_fr(points,matrix); }
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);

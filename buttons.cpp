@@ -60,6 +60,8 @@ void buttons::addIKButton(QIcon icon)
     remove_lines->setText("remove vertex");
     no_target->setFixedSize(140,70);
     no_target->setText("info");
+    QAction* ac = new QAction("one",this->parent());
+    lines->addAction(ac);
    // rubberBand->setFixedSize(140,70);
    // rubberBand->setText("RUBBER BAND");
     //

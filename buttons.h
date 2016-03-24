@@ -8,6 +8,7 @@
 #include <QGroupBox>
 #include <QVector>
 #include <QToolButton>
+#include <QMenu>
 #include <QIcon>
 
 class buttons  : public QButtonGroup

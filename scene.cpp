@@ -112,16 +112,18 @@ void scena::reDrawLines()
 
 }
 
-void scena::set_matrix(double value, point *&a, point *&b)
+void scena::set_matrix(double value, point *&a, point *&b, line_item* _child)
 {
+    qDebug()<<"Value changed "<<value;
     matrix[get_num(a)][get_num(b)] = value;
     matrix[get_num(b)][get_num(a)] = value;
-    for(int i = 0; i < lines.size(); i++)
-    {
-        if( (lines[i]->p_1 == a) || ( lines[i]->p_2 == a) ){
-            lines[i]->my_text->setPlainText(QString::number(value));
-        }
-    }
+//    for(int i = 0; i < lines.size(); i++)
+//    {
+//        if( (lines[i]->p_1 == a) || ( lines[i]->p_2 == a) ){
+//            lines[i]->my_text->setPlainText(QString::number(value));
+//        }
+//    }
+    _child->my_text->setPlainText(QString::number(value));
 }
 
 int scena::get_num(point *p)
@@ -239,18 +241,21 @@ void scena::dia()
 
 void scena::drawLoops()
 {
-    QVector<int> minelay = alh.DFS(points,matrix);    // prost)
+//    QVector<int> minelay = alh.DFS(points,matrix);    // prost)
 
-    for(int i = 0; i < minelay.size() - 1; i++)
-    {
-        if(minelay[i] != -1 && minelay[i+1] != -1){
-            QLineF line(points[minelay[i]]->scenePos(), points[minelay[i+1]]->scenePos());
-            QPen pen;
-            pen.setWidth(6);
-            pen.setColor(Qt::blue);
-            dijkstra_lines.push_back(addLine(line,pen));
-        }
-    }
+//    for(int i = 0; i < minelay.size() - 1; i++)
+//    {
+//        if(minelay[i] != -1 && minelay[i+1] != -1){
+//            QLineF line(points[minelay[i]]->scenePos(), points[minelay[i+1]]->scenePos());
+//            QPen pen;
+//            pen.setWidth(6);
+//            pen.setColor(Qt::blue);
+//            dijkstra_lines.push_back(addLine(line,pen));
+//        }
+//    }
+
+    draw_so(so.get_result(points));
+
 }
 
 void scena::drawWay(int start, int end, QVector<int> way)
@@ -443,4 +448,15 @@ void scena::skip()
     {
         point->setSelected(false);
     }
+}
+
+void scena::draw_so(vector<int> s)
+{
+    for(int i = 0; i < lines.size() ; i++)
+    {
+        this->removeItem(lines[i]);
+    }
+    for(int i =0; i < s.size() - 1; i++)
+        this->plusLine(points[s[i]],points[s[i+1]]);
+    update();
 }
