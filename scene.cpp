@@ -112,11 +112,16 @@ void scena::reDrawLines()
 
 }
 
+<<<<<<< HEAD
 void scena::set_matrix(double value, point *&a, point *&b, line_item* _child)
+=======
+void scena::set_matrix(double value, point *&a, point *&b)
+>>>>>>> 0b10d1f35f84ef2afed0123650c78612322efe85
 {
     qDebug()<<"Value changed "<<value;
     matrix[get_num(a)][get_num(b)] = value;
     matrix[get_num(b)][get_num(a)] = value;
+<<<<<<< HEAD
 //    for(int i = 0; i < lines.size(); i++)
 //    {
 //        if( (lines[i]->p_1 == a) || ( lines[i]->p_2 == a) ){
@@ -124,6 +129,14 @@ void scena::set_matrix(double value, point *&a, point *&b, line_item* _child)
 //        }
 //    }
     _child->my_text->setPlainText(QString::number(value));
+=======
+    for(int i = 0; i < lines.size(); i++)
+    {
+        if( (lines[i]->p_1 == a) || ( lines[i]->p_2 == a) ){
+            lines[i]->my_text->setPlainText(QString::number(value));
+        }
+    }
+>>>>>>> 0b10d1f35f84ef2afed0123650c78612322efe85
 }
 
 int scena::get_num(point *p)

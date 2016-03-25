@@ -46,7 +46,11 @@ void line_item::get_value(double val)
     qDebug()<<"WIN!!!!";
 
     scena * myScene = dynamic_cast<scena *>(this->scene());
+<<<<<<< HEAD
     myScene->set_matrix(val,p_1,p_2,this);
+=======
+    myScene->set_matrix(val,p_1,p_2);
+>>>>>>> 0b10d1f35f84ef2afed0123650c78612322efe85
   //  emit _val(val,p_1,p_2);
 }
 

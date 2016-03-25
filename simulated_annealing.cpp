@@ -11,18 +11,31 @@ vector<int> simulated_annealing::get_result(QList<point *> points)
     for(int i = 0; i < points.size(); i++)
         old.push_back(i);
     vector<int>new_v;
+<<<<<<< HEAD
     double temp = TEMP_MAX;
     unsigned long long i = 1;
     while(temp > 0.00001)
     {
         new_v = generate_S(old);
         double d_E = E(new_v,points) - E(old,points);
+=======
+    double temp = 10;
+    int i = 1;
+    while(temp != 0.00001)
+    {
+        new_v = generate_S(old);
+        double d_E = E(old,points) - E(new_v,points);
+>>>>>>> 0b10d1f35f84ef2afed0123650c78612322efe85
         if( d_E <= 0){
             old = new_v;
         }
         else if( do_perehod(P(d_E,temp)) )
             old = new_v;
+<<<<<<< HEAD
         temp = te(TEMP_MAX,i);
+=======
+        temp = te(10,i);
+>>>>>>> 0b10d1f35f84ef2afed0123650c78612322efe85
         i++;
     }
     return old;
