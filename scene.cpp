@@ -2,11 +2,6 @@
 
 /*
 
-    удаление линий
-        идти по массиву и сравнивать указатели с itemtAt
-        потом удалить  и из массива и со сцены    // ЧТО ?
-
-
     ПРИ ПЕРЕКЛЮЧЕНИИ РЕЖИМОВ ОБНУЛЯТЬ ISPOINTSELECTED
 
 */
@@ -20,7 +15,7 @@ scena::scena()
 scena::scena(QWidget *parent)
 {
     isPointSelected = NULL;
-      cursor_chose = no_target;//cursor_chose = add_point;
+      cursor_chose = no_target;//cursor_chose = add_point
 }
 
 void scena::plusLine(point* from, point* to)
@@ -112,31 +107,18 @@ void scena::reDrawLines()
 
 }
 
-<<<<<<< HEAD
 void scena::set_matrix(double value, point *&a, point *&b, line_item* _child)
-=======
-void scena::set_matrix(double value, point *&a, point *&b)
->>>>>>> 0b10d1f35f84ef2afed0123650c78612322efe85
 {
     qDebug()<<"Value changed "<<value;
     matrix[get_num(a)][get_num(b)] = value;
     matrix[get_num(b)][get_num(a)] = value;
-<<<<<<< HEAD
 //    for(int i = 0; i < lines.size(); i++)
 //    {
 //        if( (lines[i]->p_1 == a) || ( lines[i]->p_2 == a) ){
 //            lines[i]->my_text->setPlainText(QString::number(value));
 //        }
 //    }
-    _child->my_text->setPlainText(QString::number(value));
-=======
-    for(int i = 0; i < lines.size(); i++)
-    {
-        if( (lines[i]->p_1 == a) || ( lines[i]->p_2 == a) ){
-            lines[i]->my_text->setPlainText(QString::number(value));
-        }
-    }
->>>>>>> 0b10d1f35f84ef2afed0123650c78612322efe85
+    _child->my_text->setPlainText(QString::number(matrix[get_num(a)][get_num(b)]));
 }
 
 int scena::get_num(point *p)
@@ -233,15 +215,20 @@ void scena::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void scena::allRemove()
 {
-    for(int i = 0; i < dijkstra_lines.size() ;i++)
-    {
-        removeItem(dijkstra_lines[i]);
+    foreach(auto line, lines){
+        this->removeItem(line->my_text);
+        this->removeItem(line);
+        delete line;
     }
+    foreach(auto vertex, points){
+        this->removeItem(vertex);
+        delete vertex;
+    }
+    points.clear();
+    matrix.clear();
+    lines.clear();
     dijkstra_lines.clear();
-    if(isPointSelected != NULL){
-        isPointSelected->set_choosen(false);
-        isPointSelected = NULL;
-    }
+    isPointSelected = NULL;
 }
 
 void scena::dia()
@@ -254,20 +241,20 @@ void scena::dia()
 
 void scena::drawLoops()
 {
-//    QVector<int> minelay = alh.DFS(points,matrix);    // prost)
+    if(points.empty())
+        return;
+    QVector<int> minelay = alh.DFS(points,matrix);    // prost)
 
-//    for(int i = 0; i < minelay.size() - 1; i++)
-//    {
-//        if(minelay[i] != -1 && minelay[i+1] != -1){
-//            QLineF line(points[minelay[i]]->scenePos(), points[minelay[i+1]]->scenePos());
-//            QPen pen;
-//            pen.setWidth(6);
-//            pen.setColor(Qt::blue);
-//            dijkstra_lines.push_back(addLine(line,pen));
-//        }
-//    }
-
-    draw_so(so.get_result(points));
+    for(int i = 0; i < minelay.size() - 1; i++)
+    {
+        if(minelay[i] != -1 && minelay[i+1] != -1){
+            QLineF line(points[minelay[i]]->scenePos(), points[minelay[i+1]]->scenePos());
+            QPen pen;
+            pen.setWidth(6);
+            pen.setColor(Qt::blue);
+            dijkstra_lines.push_back(addLine(line,pen));
+        }
+    }
 
 }
 
@@ -448,6 +435,13 @@ void scena::point_pressed(point *this_point)
     }
 }
 
+void scena::salesman_porblem_replaces()
+{
+    if(points.empty())
+        return;
+    draw_so(sale_man.sales_man(points));
+}
+
 void scena::point_unpressed(point *this_point)
 {
     QString h = " ";
@@ -472,4 +466,34 @@ void scena::draw_so(vector<int> s)
     for(int i =0; i < s.size() - 1; i++)
         this->plusLine(points[s[i]],points[s[i+1]]);
     update();
+    QString _str = "Path = " + QString::number(result_way(s));
+    my_bar->setTimeoutText(_str, 4000);
+}
+
+void scena::annealing_slot()
+{
+    if(points.empty())
+        return;
+    draw_so(so.get_result(points));
+    qDebug() << matrix;
+    vector<int> _t = ostov.get_ostov(points,matrix);
+
+    int y = 0;
+
+}
+
+void scena::setBar(status_bar *bar)
+{
+    my_bar = bar;
+}
+
+double scena::result_way(vector<int> path)
+{
+    double result = 0;
+    for(int i = 0; i < points.size() - 1; i++)
+    {
+        result += sqrt( pow( points[path[i+1]]->scenePos().x() - points[path[i]]->scenePos().x() ,2) +
+                        pow( points[path[i+1]]->scenePos().y() - points[path[i]]->scenePos().y() ,2) );
+    }
+    return result;
 }

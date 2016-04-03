@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -22,27 +21,3 @@ public:
 };
 
 #endif // MAINWINDOW_H
-=======
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
-#include <QMainWindow>
-#include <QMenuBar>
-#include <QAction>
-#include <QMenu>
-#include "compil_widget.h"
-
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
-
-public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-    compil *cpm;
-    QMenuBar *bar;
-    void bari(compil *cmp);
-};
-
-#endif // MAINWINDOW_H
->>>>>>> 0b10d1f35f84ef2afed0123650c78612322efe85

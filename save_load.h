@@ -13,6 +13,7 @@
 #include <QFile>
 #include <iostream>
 #include <QMessageBox>
+#include <QDebug>
 #include "point.h"
 
 using namespace std;
@@ -32,7 +33,7 @@ public slots:
     void save( QList<point*> points, QList<QList< double >> matrix);
     void load( QList<point*> & points,  QList<QList< double >> & matrix);
     void save_fr(QList<point*> points,  QList<QList< double >> matrix);
-    void load_fr(QList<point*> & points,  QList<QList< double >> & matrix){}
+    void load_fr(QList<point*> & points,  QList<QList< double >> & matrix);
 
 };
 

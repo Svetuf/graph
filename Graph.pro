@@ -29,12 +29,10 @@ SOURCES += main.cpp\
     bellman_ford_algorythm.cpp \
     line_item.cpp \
     text_item.cpp \
-<<<<<<< HEAD
     simulated_annealing.cpp \
-    save_load.cpp
-=======
-    simulated_annealing.cpp
->>>>>>> 0b10d1f35f84ef2afed0123650c78612322efe85
+    save_load.cpp \
+    salesman.cpp \
+    ostov.cpp
 
 HEADERS  += mainwindow.h \
     compil_widget.h \
@@ -50,12 +48,10 @@ HEADERS  += mainwindow.h \
     bellman_ford_algorythm.h \
     line_item.h \
     text_item.h \
-<<<<<<< HEAD
     simulated_annealing.h \
-    save_load.h
-=======
-    simulated_annealing.h
->>>>>>> 0b10d1f35f84ef2afed0123650c78612322efe85
+    save_load.h \
+    salesman.h \
+    ostov.h
 
 FORMS    += mainwindow.ui
 

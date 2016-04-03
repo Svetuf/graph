@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -22,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QAction *lps;
     QAction *diamtr;
     QAction *floyd;
+    QAction *salesman_replace;
+    QAction *annealing;
 
     QAction* save_action;
     QAction* save_as_action;
@@ -38,6 +39,11 @@ MainWindow::MainWindow(QWidget *parent) :
     diamtr->setText("Diametr");
     floyd = new QAction(menu);
     floyd->setText("Floyd–Warshall");
+    salesman_replace = new QAction(menu);
+    salesman_replace->setText("Saleman problem");
+    annealing = new QAction(menu);
+    annealing->setText("Simulated annealing");
+
 
     save_action = new QAction(sl_menu);
     save_action->setText("Save");
@@ -54,6 +60,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(astar, SIGNAL(triggered(bool)), cmp, SLOT(Astar()));
     QObject::connect(diamtr, SIGNAL(triggered(bool)), cmp ,SLOT(diamtr()));
     QObject::connect(floyd, SIGNAL(triggered(bool)), cmp, SLOT(floyd_w()));
+    QObject::connect(salesman_replace, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(salesman_porblem_replaces()));
+    QObject::connect(annealing, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(annealing_slot()));
 
     QObject::connect(save_action, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(save()));
     QObject::connect(load_action, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(load()));
@@ -65,6 +73,8 @@ MainWindow::MainWindow(QWidget *parent) :
     menu->addAction(diamtr);
     menu->addAction(lps);
     menu->addAction(floyd);
+    menu->addAction(salesman_replace);
+    menu->addAction(annealing);
 
     sl_menu->addAction(save_action);
     sl_menu->addAction(save_as_action);
@@ -88,63 +98,3 @@ void MainWindow::bari(compil *cmp)
 {
 
 }
-=======
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
-
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
-{
-    compil *cmp = new compil(this);
-    bar = new QMenuBar(this);
-
-    QMenu *menu;
-    menu = new QMenu(this);
-    menu->setTitle("algorithms");
-
-    QAction *dij;
-    QAction *astar;
-    QAction *lps;
-    QAction *diamtr;
-    QAction *floyd;
-
-    dij = new QAction(menu);
-    dij->setText("Dijkstra");
-    astar = new QAction(menu);
-    astar->setText("A*");
-    lps = new QAction(menu);
-    lps->setText("Loop's");
-    diamtr = new QAction(menu);
-    diamtr->setText("Diametr");
-    floyd = new QAction(menu);
-    floyd->setText("Floyd–Warshall");
-
-    QObject::connect(dij, SIGNAL(triggered(bool)), cmp, SLOT(Dijks()));
-    QObject::connect(lps, SIGNAL(triggered(bool)), cmp, SLOT(loops_cnnct()));
-    QObject::connect(astar, SIGNAL(triggered(bool)), cmp, SLOT(Astar()));
-    QObject::connect(diamtr, SIGNAL(triggered(bool)), cmp ,SLOT(diamtr()));
-    QObject::connect(floyd, SIGNAL(triggered(bool)), cmp, SLOT(floyd_w()));
-
-    menu->addAction(dij);
-    menu->addAction(astar);
-    menu->addAction(diamtr);
-    menu->addAction(lps);
-    menu->addAction(floyd);
-
-    bar->addMenu(menu);
-    setMenuBar(bar);
-
-    setCentralWidget(cmp);
-    this->setMinimumSize(590, 420);
-}
-
-MainWindow::~MainWindow()
-{
-
-}
-
-void MainWindow::bari(compil *cmp)
-{
-
-}
->>>>>>> 0b10d1f35f84ef2afed0123650c78612322efe85
