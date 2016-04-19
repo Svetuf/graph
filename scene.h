@@ -1,11 +1,5 @@
 #ifndef SCENE_H
 #define SCENE_H
-/*
- * в load любом матрицу просто заполнять, а потом уже значениями, ато не точно ( stod() не так преобразует)
- * или сделать, чтобы преобразовывало провильно (костыль ?)
- *
-*/
-
 #include <iostream>
 #include <vector>
 #include <QGraphicsScene>
@@ -26,6 +20,7 @@
 #include "salesman.h"
 #include "status.h"
 #include "ostov.h"
+#include "svyaz.h"
 
 using namespace std;
 
@@ -41,7 +36,7 @@ public:
     void dia();
     void setBar(status_bar* bar);
     QList<QList< double >> matrix;
-
+     point* isPointSelected;
 private:
 
     QList<point*> points;
@@ -70,12 +65,12 @@ private:
     simulated_annealing so;
     Salesman sale_man;
     Ostov ostov;
-
+    svyaz sv;
     //
 
     Save_Load sl;
 
-    point* isPointSelected;
+
 
     void plusLine(point *from, point *to);
     void minusLine(int a, int i);
@@ -107,6 +102,7 @@ public slots:
     void annealing_slot();
     void skip();
     void allRemove();
+    void ostovVoid();
     void load()
     {
         this->allRemove();
@@ -131,7 +127,7 @@ public slots:
         }
 
     } // add lines
-    void save(){ sl.save(points,matrix); }
+    void save(){ sl.save(points,matrix); QString sl = "Graph saved to current directory"; my_bar->setTimeoutText(sl,4000); return;}
     void load_from(){
 
         this->allRemove();

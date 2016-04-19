@@ -3,7 +3,6 @@
 compil::compil(QWidget *parent)
     : QWidget(parent)
 {
-
     //delarations
     grid = new QGridLayout(this);
     status_bar* bar;
@@ -54,6 +53,34 @@ void compil::createDialog(QString title)
     QDialog* local_help = new QDialog();
     local_help->setModal(true);
     local_help->setWindowTitle(title);
+    QStackedLayout* grid = new QStackedLayout();
+    QLabel* image = new QLabel();
+    QPixmap _image;
+    if(title == "A*"){
+        _image.load("Astar..jpg");
+    }
+    else if(title == "Dijkstra alhorythm"){
+        _image.load("dij.jpg");
+    }
+    else if(title == "loop's"){
+        _image.load("loops.jpg");
+    }
+    else if(title == "diametr"){
+        _image.load("dia.jpg");
+    }
+    else if(title == "Floyd Warshall alhorythm"){
+        _image.load("fw.jpg");
+    }
+    else if(title == "salesman"){
+        _image.load("salesman.jpg");
+    }
+    else if(title == "annealing"){
+        _image.load("annealing.jpg");
+    }
+    image->setPixmap(_image);
+    grid->addWidget(image);
+    local_help->setLayout(grid);
+    local_help->setFixedSize(grid->sizeHint());
     local_help->show();
     local_help->exec();
 }
@@ -86,4 +113,21 @@ void compil::floyd_w()
 {
     createDialog("Floyd Warshall alhorythm");
     space->floyd();
+}
+
+void compil::salesman()
+{
+    createDialog("salesman");
+    this->space->Scene->salesman_porblem_replaces();
+}
+
+void compil::annealing()
+{
+    createDialog("annealing");
+    this->space->Scene->annealing_slot();
+}
+
+void compil::ostov()
+{
+    space->Scene->ostovVoid();
 }

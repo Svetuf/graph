@@ -143,7 +143,6 @@ void Save_Load::load_fr(QList<point *> &points, QList<QList<double> > &matrix)
             }
 
         }
-  qDebug() << matrix;
     }
     return;
 }
@@ -225,7 +224,6 @@ void Save_Load::load(QList<point *> &points, QList<QList<double> > &matrix)
             }
 
         }
-  qDebug() << matrix;
     }
     return;
 }

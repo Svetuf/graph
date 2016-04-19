@@ -6,10 +6,13 @@
 #include <QButtonGroup>
 #include <QDialog>
 #include <vector>
+#include <QGridLayout>
+#include <QPicture>
+#include <QPushButton>
+#include <QStackedLayout>
 #include "buttons.h"
 #include "status.h"
 #include "new_workspace.h"
-//#include "workspace.h"
 
 using namespace std;
 
@@ -21,7 +24,6 @@ class compil : public QWidget
 public:
     compil(QWidget *parent = 0);
     ~compil();
-   // workspace *space;
     buttons* button;
     new_workspace *space;
 private:
@@ -34,6 +36,9 @@ public slots:
     void loops_cnnct();
     void diamtr();
     void floyd_w();
+    void salesman();
+    void annealing();
+    void ostov();
 };
 
 #endif // COMPIL_WIDGET

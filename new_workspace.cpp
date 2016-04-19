@@ -25,7 +25,6 @@ new_workspace::new_workspace(QWidget *parent)
 
 void new_workspace::resizeEvent(QResizeEvent *)
 {
-   // this->setGeometry(0,0,this->width(),this->height());
     qDebug() << this->size();
 
     return;
@@ -56,6 +55,10 @@ void new_workspace::setAddPoints()
 void new_workspace::setNoTarget()
 {
     Scene->setCursorState(0);
+    if(Scene->isPointSelected != NULL){
+        Scene->isPointSelected->setSelected(false);
+        Scene->isPointSelected = NULL;
+    }
 }
 
 void new_workspace::setAddLines()

@@ -55,5 +55,4 @@ QVector<int> Floyd_Warshall_alhorythm::floyd_warshall(int start_p, int end_p, QL
     }
     way[go_here] =  path_matrix[go_here][end_p];
     return way;
-    // работает как надо, но надо разобраться
 }

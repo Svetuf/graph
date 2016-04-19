@@ -34,21 +34,22 @@ vector<int> Ostov::get_ostov(QList<point *> points, QList<QList<double> > matrix
        }
    }
 
-   for(int i = 0; i < couples.size() ; i++)
-   {
-       int min_index = i;
-       for(int j = i ;j < couples.size() ; j++)
-       {
-           if(couples[i]->path < couples[min_index]->path)
-               min_index = j;
-       }
-       if(min_index != i){
-        //   swap(couples[i],couples[min_index]);
-           couple* _Tmp = couples[min_index];
-           couples[min_index] = couples[i];
-           couples[i] = _Tmp;
-       }
-   }
+//   for(int i = 0; i < couples.size() ; i++)
+//   {
+//       int min_index = i;
+//       for(int j = i ;j < couples.size() ; j++)
+//       {
+//           if(couples[i]->path < couples[min_index]->path)
+//               min_index = j;
+//       }
+//       if(min_index != i){
+//           couple* _Tmp = couples[min_index];
+//           couples[min_index] = couples[i];
+//           couples[i] = _Tmp;
+//       }
+//   }
+
+   sort(couples.begin(), couples.end(), [](couple* a, couple* b){return a->path < b->path;});
 
    foreach (couple* node, couples) {
      if( seen[node->to] != 1 ){
