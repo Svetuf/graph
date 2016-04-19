@@ -44,6 +44,7 @@ QVector <int> alhorythm::Dijkstra(int startPoint, int endPoint, QList<point*>  P
             }
             isLookingPoint = minIndex;
         }
+        clear_all();
         return fromPoints;
 }
 
@@ -108,7 +109,7 @@ QVector<int> alhorythm::A_star(int startPoint, int endPoint, QList<point*>  Poin
         isLookingPoint = min_index;
 
     }while(isLookingPoint != endPoint);
-
+    clear_all();
     return fromPoints;
 }
 
@@ -157,8 +158,9 @@ QVector <int> alhorythm::DFS(QList<point* > Points, QList<QList<double> > Matrix
 
     SeenP.clear();
     parent.clear();
-
-    return Way; // путь по точкам идет до -1
+    QVector<int>temp = Way;
+    clear_all();
+    return temp;
 }
 
 double alhorythm::n(int j,int endPoint, QList<point*> & Points)
@@ -170,4 +172,14 @@ double alhorythm::n(int j,int endPoint, QList<point*> & Points)
     double y2 = Points[endPoint]->scenePos().y();
     h = sqrt(pow(x2 - x1,2) + pow(y2 - y1,2));
     return h;
+}
+
+void alhorythm::clear_all()
+{
+    SeenP.clear();
+    parent.clear();
+    Way.clear();
+    _Points.clear();
+    _Matrix.clear();
+    return;
 }

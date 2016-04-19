@@ -15,7 +15,7 @@ vector<int> simulated_annealing::get_result(QList<point *> points)
     vector<int>new_v;
     double temp = TEMP_MAX;
     ll i = 1;
-    while(temp > 0.000005)
+    while(i <= 200000)
     {
         new_v = generate_S(old);
         double d_E = E(new_v,points) - E(old,points);
@@ -24,9 +24,10 @@ vector<int> simulated_annealing::get_result(QList<point *> points)
         }
         else if( do_perehod(P(d_E,temp, E(old,points) ),i) )
             old = new_v;
-        temp = te(TEMP_MAX,i);
+        temp = te(temp,i);
         i++;
     }
+    qDebug() << "ITERATIONS " << i << "TEMP " << temp;
     return old;
 }
 
@@ -46,6 +47,8 @@ vector<int> simulated_annealing::generate_S(vector<int>now)
     srand(time(NULL));
     int _1 = rand() % now.size() ;
     int _2 = rand() % now.size() ;
+    while(_1 == _2)
+        _2 = rand() % now.size();
     int qwe  = now[_1];
     now[_1] = now[_2];
     now[_2] = qwe;

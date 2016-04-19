@@ -4,6 +4,7 @@
 #include <vector>
 #include <QList>
 #include <QDebug>
+#include <algorithm>
 #include "point.h"
 
 using namespace std;

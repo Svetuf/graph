@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     compil *cmp = new compil(this);
     bar = new QMenuBar(this);
-    //saveLoad = new Save_Load;
 
     QMenu *menu;                    // main menu
     menu = new QMenu(this);
@@ -23,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QAction *floyd;
     QAction *salesman_replace;
     QAction *annealing;
+    QAction *ostov;
 
     QAction* save_action;
     QAction* save_as_action;
@@ -43,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent) :
     salesman_replace->setText("Saleman problem");
     annealing = new QAction(menu);
     annealing->setText("Simulated annealing");
+    ostov = new QAction(menu);
+    ostov->setText("Ostov");
 
 
     save_action = new QAction(sl_menu);
@@ -60,8 +62,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(astar, SIGNAL(triggered(bool)), cmp, SLOT(Astar()));
     QObject::connect(diamtr, SIGNAL(triggered(bool)), cmp ,SLOT(diamtr()));
     QObject::connect(floyd, SIGNAL(triggered(bool)), cmp, SLOT(floyd_w()));
-    QObject::connect(salesman_replace, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(salesman_porblem_replaces()));
-    QObject::connect(annealing, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(annealing_slot()));
+    QObject::connect(salesman_replace, SIGNAL(triggered(bool)), cmp, SLOT(salesman()));
+    QObject::connect(annealing, SIGNAL(triggered(bool)), cmp, SLOT(annealing()));
+    QObject::connect(ostov, SIGNAL(triggered(bool)), cmp, SLOT(ostov()));
 
     QObject::connect(save_action, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(save()));
     QObject::connect(load_action, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(load()));
@@ -75,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
     menu->addAction(floyd);
     menu->addAction(salesman_replace);
     menu->addAction(annealing);
+    menu->addAction(ostov);
 
     sl_menu->addAction(save_action);
     sl_menu->addAction(save_as_action);
