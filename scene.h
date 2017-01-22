@@ -1,18 +1,15 @@
 #ifndef SCENE_H
 #define SCENE_H
-/*
- * в load любом матрицу просто заполнять, а потом уже значениями, ато не точно ( stod() не так преобразует)
- * или сделать, чтобы преобразовывало провильно (костыль ?)
- *
-*/
-
 #include <iostream>
 #include <vector>
 #include <QGraphicsScene>
+#include <QGraphicsView>
 #include <QWidget>
 #include <QMouseEvent>
 #include <QPoint>
+#include <QThread>
 #include <QDebug>
+#include <QTimer>
 #include <QGraphicsSceneMouseEvent>
 #include <math.h>
 #include <QStyleOptionGraphicsItem>
@@ -26,6 +23,8 @@
 #include "salesman.h"
 #include "status.h"
 #include "ostov.h"
+#include "svyaz.h"
+#include "genetic.h"
 
 using namespace std;
 
@@ -35,22 +34,24 @@ class scena : public QGraphicsScene
    friend class Save_Load;
 public:
     scena();
-    scena(QWidget *parent = 0);
+    scena(QGraphicsView *parent);
     void setCursorState(int m);
     void drawLoops();
     void dia();
     void setBar(status_bar* bar);
     QList<QList< double >> matrix;
-
+     point* isPointSelected;
 private:
 
     QList<point*> points;
 
-
+    QGraphicsView* myView;
 
     QList<line_item*>lines;
 
     vector<QGraphicsItem*>dijkstra_lines;
+
+    vector<vector<int>>toAnnealing;
 
     // cursor stuff's
     enum cursorState{no_target, add_point, add_lines, remove_lines
@@ -70,12 +71,13 @@ private:
     simulated_annealing so;
     Salesman sale_man;
     Ostov ostov;
-
+    svyaz sv;
+    Genetic genA;
     //
 
     Save_Load sl;
 
-    point* isPointSelected;
+
 
     void plusLine(point *from, point *to);
     void minusLine(int a, int i);
@@ -85,28 +87,38 @@ private:
     void reDrawLines();
     void removePoint(point* my_p);
     void drawWay(int start, int end, QVector<int>way);
+    void sleep(qint64 msec)
+    {
+        QEventLoop loop;
+        QTimer::singleShot(msec, &loop, SLOT(quit()));
+        loop.exec();
+    }
 
 
     int get_num(point* p);
     double n(QPointF a, QPointF b);
     void do_it(point* a);
-    void draw_so(vector<int>s);
+
     double result_way(vector<int>path);
 
 signals:
 
     void send_to_permament_status(QString & stroka);
     void send_to_timeout_text(QString & stroka, int value);
+    void gCh(int a);
 
 public slots:
+    void draw_so(vector<int>s);
+    void addAnealing(vector<int>a);
     void point_pressed(point* this_point);
     void point_move(point* this_point, QPointF position);
     void point_unpressed(point* this_point);
     void set_matrix(double value,point *&a, point *&b, line_item* _child);
     void salesman_porblem_replaces();
-    void annealing_slot();
+    void annealing_slot(int iterations);
     void skip();
     void allRemove();
+    void ostovVoid();
     void load()
     {
         this->allRemove();
@@ -131,7 +143,7 @@ public slots:
         }
 
     } // add lines
-    void save(){ sl.save(points,matrix); }
+    void save(){ sl.save(points,matrix); QString sl = "Graph saved to current directory"; my_bar->setTimeoutText(sl,4000); return;}
     void load_from(){
 
         this->allRemove();
@@ -156,6 +168,8 @@ public slots:
         }
     }
     void save_as(){ sl.save_fr(points,matrix); }
+    void genetic(int itera, int n);
+    void genCh(int a, vector<int> b){emit gCh(a); sleep(1); draw_so(b) ;}
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);

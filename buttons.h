@@ -30,7 +30,6 @@ public:
     QToolButton *remove_lines;
     QToolButton *remove_all;
     QToolButton *no_target;
- //   QToolButton *rubberBand;
     //
 private:
     void addIKButton(QIcon icon);

@@ -32,7 +32,9 @@ SOURCES += main.cpp\
     simulated_annealing.cpp \
     save_load.cpp \
     salesman.cpp \
-    ostov.cpp
+    ostov.cpp \
+    svyaz.cpp \
+    genetic.cpp
 
 HEADERS  += mainwindow.h \
     compil_widget.h \
@@ -51,7 +53,9 @@ HEADERS  += mainwindow.h \
     simulated_annealing.h \
     save_load.h \
     salesman.h \
-    ostov.h
+    ostov.h \
+    svyaz.h \
+    genetic.h
 
 FORMS    += mainwindow.ui
 

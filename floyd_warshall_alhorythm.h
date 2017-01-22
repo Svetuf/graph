@@ -21,10 +21,6 @@ public:
     QVector<int>floyd_warshall(int start_p, int end_p , QList<point*> Points,
                             QList<QList<double> > Matrix);
 
- //private:
-
-
-
 };
 
 #endif // FLOYD_WARSHALL_ALHORYTHM_H

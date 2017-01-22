@@ -1,20 +1,21 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
+//#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     compil *cmp = new compil(this);
     bar = new QMenuBar(this);
-    //saveLoad = new Save_Load;
 
     QMenu *menu;                    // main menu
     menu = new QMenu(this);
-    menu->setTitle("algorithms");
+    menu->setTitle("Алгоритмы");
 
     QMenu *sl_menu;             // menu to save or load
     sl_menu = new QMenu(this);
-    sl_menu->setTitle("Save/Load");
+    sl_menu->setTitle("Сохр./Загр.");
+
+    QAction* genetic;
 
     QAction *dij;
     QAction *astar;
@@ -23,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QAction *floyd;
     QAction *salesman_replace;
     QAction *annealing;
+    QAction *ostov;
 
     QAction* save_action;
     QAction* save_as_action;
@@ -30,29 +32,33 @@ MainWindow::MainWindow(QWidget *parent) :
     QAction* load_from_action;
 
     dij = new QAction(menu);
-    dij->setText("Dijkstra");
+    dij->setText("Алгоритм Дейкстры");
     astar = new QAction(menu);
     astar->setText("A*");
     lps = new QAction(menu);
-    lps->setText("Loop's");
+    lps->setText("Циклы");
     diamtr = new QAction(menu);
-    diamtr->setText("Diametr");
+    diamtr->setText("Диаметр");
     floyd = new QAction(menu);
-    floyd->setText("Floyd–Warshall");
+    floyd->setText("Алгоритм Флойда-Уоршелла");
     salesman_replace = new QAction(menu);
-    salesman_replace->setText("Saleman problem");
+    salesman_replace->setText("Задача коммивояжера");
     annealing = new QAction(menu);
-    annealing->setText("Simulated annealing");
+    annealing->setText("Имитация отжига (задача посыльного)");
+    ostov = new QAction(menu);
+    ostov->setText("Минимальный остов графа");
+    genetic = new QAction(bar);
+    genetic->setText("Генетический алгоритм");
 
 
     save_action = new QAction(sl_menu);
-    save_action->setText("Save");
+    save_action->setText("Сохранить");
     save_as_action = new QAction(sl_menu);
-    save_as_action->setText("Save as..");
+    save_as_action->setText("Сохранить как..");
     load_action = new QAction(sl_menu);
-    load_action->setText("Load");
+    load_action->setText("Загрузить");
     load_from_action = new QAction(this);
-    load_from_action->setText("Load from...");
+    load_from_action->setText("Загрузить из...");
 
 
     QObject::connect(dij, SIGNAL(triggered(bool)), cmp, SLOT(Dijks()));
@@ -60,8 +66,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(astar, SIGNAL(triggered(bool)), cmp, SLOT(Astar()));
     QObject::connect(diamtr, SIGNAL(triggered(bool)), cmp ,SLOT(diamtr()));
     QObject::connect(floyd, SIGNAL(triggered(bool)), cmp, SLOT(floyd_w()));
-    QObject::connect(salesman_replace, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(salesman_porblem_replaces()));
-    QObject::connect(annealing, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(annealing_slot()));
+    QObject::connect(salesman_replace, SIGNAL(triggered(bool)), cmp, SLOT(salesman()));
+    QObject::connect(annealing, SIGNAL(triggered(bool)), cmp, SLOT(annealing()));
+    QObject::connect(ostov, SIGNAL(triggered(bool)), cmp, SLOT(ostov()));
+    QObject::connect(genetic, SIGNAL(triggered(bool)), cmp, SLOT(Genetic()));
 
     QObject::connect(save_action, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(save()));
     QObject::connect(load_action, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(load()));
@@ -75,6 +83,7 @@ MainWindow::MainWindow(QWidget *parent) :
     menu->addAction(floyd);
     menu->addAction(salesman_replace);
     menu->addAction(annealing);
+    menu->addAction(ostov);
 
     sl_menu->addAction(save_action);
     sl_menu->addAction(save_as_action);
@@ -83,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     bar->addMenu(menu);
     bar->addMenu(sl_menu);
+    bar->addAction(genetic);
     setMenuBar(bar);
 
     setCentralWidget(cmp);

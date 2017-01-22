@@ -34,6 +34,7 @@ private:
     QList <point*> _Points;
     QList<QList<double> > _Matrix;
 
+    void clear_all();
 
     double n(int j, int endPoint, QList<point *> &Points);
 };

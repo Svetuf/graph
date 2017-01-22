@@ -10,6 +10,9 @@
 #include <QMouseEvent>
 #include <QPoint>
 #include <QRect>
+#include <QProgressDialog>
+#include <QProgressBar>
+#include <QVBoxLayout>
 #include <QDrag>
 #include <QDragEnterEvent>
 #include <qdrag.h>
@@ -52,6 +55,8 @@ public slots:
     void floyd();
     void get_perm_txt(QString & stroka);
     void get_txt_tm_out(QString & stroka, int timeout);
+    void genetic(int it, int num);
+    void anealint(int t);
 };
 
 #endif // NEW_WORKSPACE_H

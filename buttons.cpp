@@ -3,11 +3,8 @@
 buttons::buttons()
 {
     setExclusive(true);
-   // box = new QGroupBox();
     layout = new QVBoxLayout();
     addIKButton(QIcon("Blue-button11.jpg"));
-   // setPressing();
-   // box->setLayout(layout);
 
 }
 
@@ -54,19 +51,17 @@ void buttons::addIKButton(QIcon icon)
 
     // settings
     lines->setFixedSize(140,70);
-    lines->setText("add vertex");
+    lines->setText("добавить ребро");
     add_points->setFixedSize(140,70);
-    add_points->setText("add node");
+    add_points->setText("добавить вершину");
     remove_points->setFixedSize(140,70);
-    remove_points->setText("remove node");
+    remove_points->setText("удалить вершину");
     remove_lines->setFixedSize(140,70);
-    remove_lines->setText("remove vertex");
+    remove_lines->setText("удалить ребро");
     no_target->setFixedSize(140,70);
-    no_target->setText("info");
+    no_target->setText("инфо");
     remove_all->setFixedSize(140,70);
-    remove_all->setText("remove all");
-    QAction* ac = new QAction("one",this->parent());
-    lines->addAction(ac);
+    remove_all->setText("очистить поле");
    // rubberBand->setFixedSize(140,70);
    // rubberBand->setText("RUBBER BAND");
     //

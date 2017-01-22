@@ -5,7 +5,8 @@ Salesman::Salesman()
 
 }
 
-vector<int> Salesman::sales_man(QList< point *> points)
+
+vector<int> Salesman::sales_man(QList< point *> points, QList<QList<double> > matrix)
 {
     if(points.empty())
         return vector<int>();
@@ -14,25 +15,46 @@ vector<int> Salesman::sales_man(QList< point *> points)
         start_vector.push_back(i);
     get_replace(start_vector);
     double path_to_current_placement = DBL_MAX;
-    foreach(auto placement, replace_s)
+
+    for(int i = 0 ; i  < replace_s.size(); i++)
     {
-        if( _Pth(placement, points) < path_to_current_placement){
-            path_to_current_placement = _Pth(placement, points);
-            start_vector = placement;
+        if( _Pth(replace_s[i], points,matrix) == -1)continue;
+        if( _Pth(replace_s[i], points,matrix) < path_to_current_placement){
+            path_to_current_placement = _Pth(replace_s[i], points,matrix);
+            start_vector = replace_s[i];
         }
     }
     replace_s.clear();
     return start_vector;
 }
 
-double Salesman::_Pth(vector<int> poriadok, QList<point*>is_now)
+double Salesman::_Pth(vector<int> poriadok, QList<point*>is_now, QList<QList< double >> matrix)
 {
-    double result = 0;
-    for(int i = 0; i < is_now.size() - 1; i++)
+    for(int i = 0 ; i < poriadok.size() - 1; i++)
     {
-        result += sqrt( pow( is_now[poriadok[i+1]]->scenePos().x() - is_now[poriadok[i]]->scenePos().x() ,2) +
-                        pow( is_now[poriadok[i+1]]->scenePos().y() - is_now[poriadok[i]]->scenePos().y() ,2) );
+        if(matrix[poriadok[i]][poriadok[i+1]] == 0)
+            return -1;
     }
+    if(matrix[poriadok[poriadok.size() - 1]][poriadok[0]] == 0)
+        return -1;
+
+    int* mas = (int*)calloc(poriadok.size(), sizeof(int));
+
+    for(int i = 0; i < poriadok.size(); i++){
+        mas[poriadok[i]]++;
+    }
+
+    for(int i = 0; i < poriadok.size(); i++){
+        if(mas[i] != 1)
+            return 999999999;
+    }
+
+    double result = 0;
+    for(int i = 0; i < poriadok.size() - 1/*is_now.size() - 1*/; i++)
+    {
+        result += matrix[poriadok[i]][poriadok[i+1]];
+    }
+   result += matrix[poriadok[poriadok.size() - 1]][poriadok[0]];
     return result;
 }
 
@@ -61,3 +83,12 @@ void Salesman::get_replace(vector<int> &vec)
         }
     }
 }
+
+
+
+
+/*test*/
+
+
+
+

@@ -1,26 +1,32 @@
 #include "scene.h"
 
-/*
-
-    ПРИ ПЕРЕКЛЮЧЕНИИ РЕЖИМОВ ОБНУЛЯТЬ ISPOINTSELECTED
-
-*/
-
 scena::scena()
 {
     isPointSelected = NULL;
     cursor_chose = no_target;
+    connect(&so, SIGNAL(situation(vector<int>)), this, SLOT(draw_so(vector<int>a)));
 }
 
-scena::scena(QWidget *parent)
+scena::scena(QGraphicsView *parent)
 {
+    myView = parent;
     isPointSelected = NULL;
-      cursor_chose = no_target;//cursor_chose = add_point
+     cursor_chose = no_target;
+     connect(&so, SIGNAL(situation(int,vector<int>)), this, SLOT(genCh(int, vector<int>)));
+     connect(&genA, SIGNAL(changed(int, vector<int>)), this, SLOT(genCh(int, vector<int>)));
+}
+
+void scena::addAnealing(vector<int> a)
+{
+    //toAnnealing.push_back(a);
+    sleep(3);
+    draw_so(a);
 }
 
 void scena::plusLine(point* from, point* to)
-{
-
+{   
+    if(from == to)
+        return;
     int _from = get_num(from);
     int _to = get_num(to);
     matrix[_from][_to] = n(points[_from]->scenePos(), points[_to]->scenePos());
@@ -35,6 +41,10 @@ void scena::plusLine(point* from, point* to)
     this->addItem(o);
     o->set_text();
     lines.push_back(o);
+
+    from->my_lines.push_back(dynamic_cast<QGraphicsLineItem*>(o));
+    to->my_lines.push_back(dynamic_cast<QGraphicsLineItem*>(o));
+
 
 }
 
@@ -79,7 +89,6 @@ void scena::reDrawLines()
     return;
     for(int i = 0; i < lines.size(); i++)
     {
-       // removeItem(lines[i]->my_text);
         removeItem(lines[i]);
          QObject::connect(lines[i], SIGNAL(_val(double)), this, SLOT(set_matrix(double,point*&,point*&)));
     }
@@ -109,15 +118,9 @@ void scena::reDrawLines()
 
 void scena::set_matrix(double value, point *&a, point *&b, line_item* _child)
 {
-    qDebug()<<"Value changed "<<value;
     matrix[get_num(a)][get_num(b)] = value;
     matrix[get_num(b)][get_num(a)] = value;
-//    for(int i = 0; i < lines.size(); i++)
-//    {
-//        if( (lines[i]->p_1 == a) || ( lines[i]->p_2 == a) ){
-//            lines[i]->my_text->setPlainText(QString::number(value));
-//        }
-//    }
+
     _child->my_text->setPlainText(QString::number(matrix[get_num(a)][get_num(b)]));
 }
 
@@ -133,12 +136,22 @@ int scena::get_num(point *p)
 
 void scena::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    if(!dijkstra_lines.empty()){
+        foreach(auto dline, dijkstra_lines){
+            this->removeItem(dline);
+            delete dline;
+        }
+        dijkstra_lines.clear();
+        foreach(auto p, points){
+            if(p->isSelected()){
+                p->setSelected(false);
+                break;
+            }
+        }
+    }
     QTransform trans;
     point* tmp = dynamic_cast<point*>(itemAt(event->scenePos(), trans));
 
-    qDebug()<<"pressed "<<itemAt(event->scenePos(), trans);
-
-   // qDebug() << "Grabber is"<<mouseGrabberItem();
     switch(cursor_chose)
     {
     case add_point:
@@ -148,7 +161,6 @@ void scena::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     case no_target:
 
-            //here show info about point
          QGraphicsScene::mousePressEvent(event);
          return;
         break;
@@ -181,6 +193,8 @@ void scena::mousePressEvent(QGraphicsSceneMouseEvent *event)
         break;
     case remove_lines:
     {
+
+
         QGraphicsItem* new_tmp = itemAt(event->scenePos(), trans);
         if(new_tmp != NULL){
             for(int i = 0; i < lines.size() ; i++)
@@ -188,10 +202,8 @@ void scena::mousePressEvent(QGraphicsSceneMouseEvent *event)
                 if(new_tmp == lines[i]){
                     removeItem(dynamic_cast<line_item*>(new_tmp)->my_text);
                     removeItem(new_tmp);
-                    minusLine(get_num(dynamic_cast<point*>(itemAt(lines[i]->line().p1(),trans))),
-                              get_num(dynamic_cast<point*>(itemAt(lines[i]->line().p2(),trans))));
-                    //reDrawLines();
-                    lines.removeAt(i);
+                    minusLine(lines[i]);
+
                     break;
                 }
             }
@@ -215,15 +227,11 @@ void scena::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void scena::allRemove()
 {
-    foreach(auto line, lines){
-        this->removeItem(line->my_text);
-        this->removeItem(line);
-        delete line;
+    foreach(auto this_item, this->items()){
+        this->removeItem(this_item);
+        delete this_item;
     }
-    foreach(auto vertex, points){
-        this->removeItem(vertex);
-        delete vertex;
-    }
+
     points.clear();
     matrix.clear();
     lines.clear();
@@ -233,6 +241,13 @@ void scena::allRemove()
 
 void scena::dia()
 {
+    int komp = sv.komponent_svyaznost(points,matrix);
+    if(komp > 1){
+        QMessageBox* box= new QMessageBox("Alert","there is " + QString::number(komp) + " graphov",
+                                          QMessageBox::Information, NULL, NULL, QMessageBox::Cancel | QMessageBox::Escape);
+        box->exec();
+        return;
+    }
     QVector<int> r = _d.dmtr(points, matrix);
     drawWay(r[0],r[1], alh.A_star(r[0],r[1],points,matrix));
     QString mfk = "Diametr = " + QString::number(r[2]);
@@ -241,9 +256,30 @@ void scena::dia()
 
 void scena::drawLoops()
 {
+    if(!dijkstra_lines.empty()){
+        foreach(auto d, dijkstra_lines){
+            this->removeItem(d);
+            delete d;
+        }
+        dijkstra_lines.clear();
+    }
     if(points.empty())
         return;
-    QVector<int> minelay = alh.DFS(points,matrix);    // prost)
+    QVector<int> minelay = alh.DFS(points,matrix);
+
+    QVector<QColor>colors;
+
+    colors.push_back(Qt::green);
+    colors.push_back(Qt::magenta);
+    colors.push_back(Qt::cyan);
+    colors.push_back(Qt::blue);
+    colors.push_back(Qt::yellow);
+
+    QColor color = colors[ rand() % colors.size() ];
+
+    int count = 0;
+
+    srand(time(NULL));
 
     for(int i = 0; i < minelay.size() - 1; i++)
     {
@@ -251,23 +287,32 @@ void scena::drawLoops()
             QLineF line(points[minelay[i]]->scenePos(), points[minelay[i+1]]->scenePos());
             QPen pen;
             pen.setWidth(6);
-            pen.setColor(Qt::blue);
+            pen.setColor(color);
             dijkstra_lines.push_back(addLine(line,pen));
         }
+        if(minelay[i] == -1){
+            color = colors[ rand() % colors.size() ];
+            count++;
+        }
     }
-
+    QString toText = "is " + QString::number(count) + " loop's";
+    my_bar->setTimeoutText(toText, 5000);
 }
 
 void scena::drawWay(int start, int end, QVector<int> way)
 {
+    double _rslt = 0;
     while(end != start){
         QLineF line(points[end]->scenePos(), points[way[end]]->scenePos());
+        _rslt += matrix[end][way[end]];
         QPen pen;
         pen.setWidth(8);
         pen.setColor(Qt::green);
         dijkstra_lines.push_back(addLine(line,pen));
         end = way[end];
     }
+    QString _aaaaa = "path is " + QString::number(_rslt);
+    my_bar->setTimeoutText(_aaaaa, 4000);
 }
 
 void scena::minusLine(int a, int i)
@@ -280,11 +325,15 @@ void scena::minusLine(int a, int i)
 
 void scena::minusLine(line_item *line)
 {
+    line->p_1->remove_at_lines(dynamic_cast<QGraphicsLineItem*>(line));
+    line->p_2->remove_at_lines(dynamic_cast<QGraphicsLineItem*>(line));
+    minusLine(get_num(line->p_1), get_num(line->p_2));
     this->removeItem(line->my_text);
     this->removeItem(line);
     for(int i = 0; i < lines.size(); i++)
         if(lines[i] == line){
             lines.removeAt(i);
+            delete line;
             return;
         }
 }
@@ -293,29 +342,21 @@ void scena::removePoint(point* my_p)
 {
     int n = get_num(my_p);
 
-    vector<line_item*>tmp_arr;
-    for(int i = 0; i < lines.size() ; i++)
-    {
-        if( (lines[i]->p_1 == my_p) || (lines[i]->p_2 == my_p))
-            tmp_arr.push_back(lines[i]);
-    }
-
-    for(int i = 0; i < tmp_arr.size(); i++)
-    {
-        for(int j = 0; j < lines.size(); j++)
-        {
-            if(lines[j] == tmp_arr[i]){
-                QTransform trans;
-                removeItem(lines[j]->my_text);
-
-                minusLine(get_num(dynamic_cast<point*>(itemAt(lines[j]->line().p1(),trans))),
-                          get_num(dynamic_cast<point*>(itemAt(lines[j]->line().p2(),trans))));
-                removeItem(lines[j]);
-                lines.removeAt(j);
+    foreach(auto line, my_p->my_lines){
+        line_item* currentItem = dynamic_cast<line_item*>(line);
+        point* sec_p = (currentItem->p_1 == my_p) ? currentItem->p_2 : currentItem->p_1;
+        sec_p->remove_at_lines(line);
+        this->removeItem(line);
+        for(int i = 0; i < lines.size() ; i++)
+            if(lines[i] == currentItem){
+                lines.removeAt(i);
                 break;
             }
-        }
+        delete currentItem;
     }
+
+    this->removeItem(my_p);
+    delete my_p;
 
     for(int i = 0; i < matrix.size() ; i++)
     {
@@ -334,14 +375,6 @@ void scena::setCursorState(int m)
 void scena::point_move(point *this_point, QPointF position)
 {
 
-  /*  for(int i = 0 ;i < points.size(); i++)
-    {
-        int _t_m = get_num(this_point);
-        if(matrix[i][_t_m] > 0){
-            matrix[i][_t_m] = n(this_point->scenePos(), points[i]->scenePos());
-            matrix[_t_m][i] = matrix[i][_t_m];
-        }
-    }*/
     if(cursor_chose == no_target){
 
         this_point->setPos(position);
@@ -356,8 +389,7 @@ void scena::point_move(point *this_point, QPointF position)
     }
     if(cursor_chose == add_lines){
         this_point->setSelected(true);
-        isPointSelected = this_point;           // костыль ?
-       //  reDrawLines();
+        isPointSelected = this_point;
     }
 
 }
@@ -424,22 +456,70 @@ void scena::point_pressed(point *this_point)
         removeItem(dynamic_cast<QGraphicsItem*>(this_point));
         removePoint(this_point);
         points.removeAt(get_num(this_point));
-      //  reDrawLines();
     }
     if(cursor_chose == no_target){
+        int stepen = 0;
+        int n = get_num(this_point);
+        for(int i = 0; i < points.size() ; i++)
+            if(matrix[n][i] > 0)
+                stepen++;
         QString f = "Chosed " + QString::number(get_num(this_point)) +
                 " point , pos = x:" +
                 QString::number(this_point->scenePos().x()) + " y:" +
-                QString::number(this_point->scenePos().y());
+                QString::number(this_point->scenePos().y()) + " pow = " + QString::number(stepen) +
+                " svuaz = " +QString::number(sv.komponent_svyaznost(points,matrix));
         emit send_to_permament_status(f);
     }
+    return;
 }
 
-void scena::salesman_porblem_replaces()
+void scena::salesman_porblem_replaces()///////////////////////////////////////////////////////////////////////////////////////
 {
     if(points.empty())
         return;
-    draw_so(sale_man.sales_man(points));
+    if(!dijkstra_lines.empty()){
+        foreach(auto dline, dijkstra_lines){
+            this->removeItem(dline);
+            delete dline;
+        }
+        dijkstra_lines.clear();
+        foreach(auto p, points){
+            if(p->isSelected()){
+                p->setSelected(false);
+                break;
+            }
+        }
+    }
+    if(points.size() > 7){
+         QMessageBox* box= new QMessageBox("Alert","Too many Verticles", QMessageBox::Information, NULL, NULL, QMessageBox::Cancel | QMessageBox::Escape);
+           box->exec();
+         return;
+    }
+    draw_so(sale_man.sales_man(points, matrix));
+
+}
+
+void scena::genetic(int itera, int n)
+{
+    if(points.empty()){
+        return;
+
+    }
+    if(!dijkstra_lines.empty()){
+        foreach(auto dline, dijkstra_lines){
+            this->removeItem(dline);
+            delete dline;
+        }
+        dijkstra_lines.clear();
+        foreach(auto p, points){
+            if(p->isSelected()){
+                p->setSelected(false);
+                break;
+            }
+        }
+    }
+
+    draw_so(genA.genetic(points,matrix,itera, n));
 }
 
 void scena::point_unpressed(point *this_point)
@@ -459,26 +539,88 @@ void scena::skip()
 
 void scena::draw_so(vector<int> s)
 {
-    for(int i = 0; i < lines.size() ; i++)
-    {
-        this->removeItem(lines[i]);
+//    for(int i = 0; i < lines.size() ; i++)
+//    {
+//        this->removeItem(lines[i]);
+//    }
+//    for(int i = 0; i < matrix.size() ; i++)
+//    {
+//        for(int j = 0; j < matrix.size() ;j++)
+//        {
+//            matrix[i][j] = 0;
+//        }
+//    }
+
+
+
+//    for(int i =0; i < s.size() - 1; i++)
+//        this->plusLine(points[s[i]],points[s[i+1]]);
+//    this->plusLine(points[s[s.size() - 1]], points[s[0]]);
+
+//    this->myView->parentWidget()->activateWindow();
+
+//    qDebug() << activeWindow();
+
+    if(!dijkstra_lines.empty()){
+        foreach(auto d, dijkstra_lines){
+            this->removeItem(d);
+            delete d;
+        }
+        dijkstra_lines.clear();
     }
-    for(int i =0; i < s.size() - 1; i++)
-        this->plusLine(points[s[i]],points[s[i+1]]);
+
+    QPen pen;
+    pen.setWidth(6);
+    pen.setColor(Qt::green);
+
+    for(int i = 0; i < s.size() - 1; i++)
+    {
+        QLineF line(points[s[i]]->scenePos(), points[s[i+1]]->scenePos());
+        dijkstra_lines.push_back(addLine(line,pen));
+    }
+
+    QLineF line(points[s[s.size() - 1]]->scenePos(), points[s[0]]->scenePos());
+    dijkstra_lines.push_back(addLine(line,pen));
+
     update();
     QString _str = "Path = " + QString::number(result_way(s));
     my_bar->setTimeoutText(_str, 4000);
 }
 
-void scena::annealing_slot()
+void scena::annealing_slot(int iterations)
 {
+
     if(points.empty())
         return;
-    draw_so(so.get_result(points));
-    qDebug() << matrix;
-    vector<int> _t = ostov.get_ostov(points,matrix);
+    if(!dijkstra_lines.empty()){
+        foreach(auto dline, dijkstra_lines){
+            this->removeItem(dline);
+            delete dline;
+        }
+        dijkstra_lines.clear();
+        foreach(auto p, points){
+            if(p->isSelected()){
+                p->setSelected(false);
+                break;
+            }
+        }
+    }
 
-    int y = 0;
+    vector<int>y = so.get_result(points, matrix, iterations);
+
+//    for(int i = 0; i < toAnnealing.size(); i++)
+//    {
+//        draw_so(toAnnealing[i]);
+//        sleep(10);
+//        update();
+//    }
+    toAnnealing.clear();
+    draw_so(y);
+   // disconnect(&so, SIGNAL(situation(vector<int>)), this, SLOT(draw_so(vector<int>)));
+    qDebug() << matrix;
+   // vector<int> _t = ostov.get_ostov(points,matrix);
+
+   // int y = 0;
 
 }
 
@@ -496,4 +638,33 @@ double scena::result_way(vector<int> path)
                         pow( points[path[i+1]]->scenePos().y() - points[path[i]]->scenePos().y() ,2) );
     }
     return result;
+}
+
+void scena::ostovVoid()
+{
+    if(points.empty())
+        return;
+    if(!dijkstra_lines.empty()){
+        foreach(auto dline, dijkstra_lines){
+            this->removeItem(dline);
+            delete dline;
+        }
+        dijkstra_lines.clear();
+        foreach(auto p, points){
+            if(p->isSelected()){
+                p->setSelected(false);
+                break;
+            }
+        }
+    }
+    vector<int> way__ = ostov.get_ostov(points,matrix);
+
+    for(int i = 0; i < way__.size() - 1; i+=2 ){
+        QLineF line(points[way__[i]]->scenePos(),points[way__[i+1]]->scenePos());
+        QPen pen;
+        pen.setWidth(6);
+        pen.setColor(Qt::green);
+        dijkstra_lines.push_back(addLine(line,pen));
+    }
+
 }

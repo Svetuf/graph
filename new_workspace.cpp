@@ -25,7 +25,6 @@ new_workspace::new_workspace(QWidget *parent)
 
 void new_workspace::resizeEvent(QResizeEvent *)
 {
-   // this->setGeometry(0,0,this->width(),this->height());
     qDebug() << this->size();
 
     return;
@@ -56,6 +55,10 @@ void new_workspace::setAddPoints()
 void new_workspace::setNoTarget()
 {
     Scene->setCursorState(0);
+    if(Scene->isPointSelected != NULL){
+        Scene->isPointSelected->setSelected(false);
+        Scene->isPointSelected = NULL;
+    }
 }
 
 void new_workspace::setAddLines()
@@ -108,4 +111,44 @@ void new_workspace::get_txt_tm_out(QString &stroka, int timeout)
 void new_workspace::get_perm_txt(QString &stroka)
 {
     emit _send_to_permament_status(stroka);
+}
+
+void new_workspace::anealint(int t)
+{
+    QProgressDialog b;
+
+    b.setMinimum(0);
+    b.setMaximum(100);
+    b.setValue(48);
+    connect(Scene, SIGNAL(gCh(int)), &b, SLOT(setValue(int)));
+
+    b.show();
+    b.activateWindow();
+
+    Scene->annealing_slot(t);
+}
+
+void new_workspace::genetic(int it, int num)
+{
+//    QProgressDialog d;
+//    d.setMinimum(0);
+//    d.setMaximum(100);r
+//    d.show();
+//    d.exec();
+
+    if(it*num == 0)
+        return;
+
+    QProgressDialog b;
+
+    b.setMinimum(0);
+    b.setMaximum(100);
+    b.setValue(48);
+    connect(Scene, SIGNAL(gCh(int)), &b, SLOT(setValue(int)));
+
+    //b.exec();
+    b.activateWindow();
+
+    Scene->genetic(it, num);
+
 }

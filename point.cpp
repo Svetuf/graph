@@ -47,7 +47,6 @@ void point::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 void 	point::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
     qDebug()<<"mouse move";
-    //this->setPos(event->scenePos());
     emit point_is_move(this, event->scenePos());
 }
 void 	point::mousePressEvent(QGraphicsSceneMouseEvent * event)

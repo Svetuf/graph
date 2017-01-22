@@ -8,6 +8,7 @@
 #include <QPen>
 #include <QBrush>
 #include <QPainter>
+#include "vector"
 #include <QPoint>
 #include <QMouseEvent>
 #include <QGraphicsSceneMouseEvent>
@@ -30,6 +31,16 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void set_choosen(bool k);
+
+    QVector<QGraphicsLineItem*>my_lines;
+
+    void remove_at_lines(QGraphicsLineItem* line){
+         for(int i = 0; i < my_lines.size() ; i++)
+             if(my_lines[i] == line){
+                 my_lines.removeAt(i);
+                 return;
+             }
+    }
 
 signals:
     void point_is_pressed(point* this_point);

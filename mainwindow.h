@@ -16,7 +16,6 @@ public:
     ~MainWindow();
     compil *cpm;
     QMenuBar *bar;
-   // Save_Load *saveLoad;
     void bari(compil *cmp);
 };
 
