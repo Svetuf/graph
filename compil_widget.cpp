@@ -195,3 +195,41 @@ void compil::Genetic()
 
     space->genetic(ITERATIONSG, NMASG);
 }
+
+
+void compil::aintSlot()
+{
+    AINTCOUNT = 0;
+    ELITEAINT = 0;
+    ALPHA = 0;
+    BETTA = 0;
+    ITERATIONS = 0;
+
+    QDialog* local_help = new QDialog();
+    QPushButton* toclose = new QPushButton();
+    QRadioButton *b = new QRadioButton;
+    toclose->setText("Ok");
+    b->setText("Авто параметры");
+    local_help->setModal(true);
+    local_help->setWindowTitle("settings");
+    QFormLayout* grid1 = new QFormLayout();
+    QLineEdit iterations;
+    QLineEdit aint;
+    QLineEdit elite;
+    QLineEdit al;
+    QLineEdit bet;
+
+     grid1->addRow(tr("Количество муравьев :"), &aint);
+     grid1->addRow(tr("количество элитных муравьев :"), &elite);
+     grid1->addRow(tr("значение параметра alpha :"), &al);
+     grid1->addRow(tr("значение параметра betta :"), &bet);
+     grid1->addRow(tr("количество итераций :"), &iterations);
+     grid1->addRow(b);
+     grid1->addWidget(toclose);
+
+     local_help->setLayout(grid1);
+     local_help->setFixedSize(grid1->sizeHint());
+     local_help->show();
+     local_help->exec();
+
+}

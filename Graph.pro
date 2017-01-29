@@ -34,7 +34,9 @@ SOURCES += main.cpp\
     salesman.cpp \
     ostov.cpp \
     svyaz.cpp \
-    genetic.cpp
+    genetic.cpp \
+    china.cpp \
+    aintalgo.cpp
 
 HEADERS  += mainwindow.h \
     compil_widget.h \
@@ -55,10 +57,13 @@ HEADERS  += mainwindow.h \
     salesman.h \
     ostov.h \
     svyaz.h \
-    genetic.h
+    genetic.h \
+    china.h \
+    aintalgo.h
 
 FORMS    += mainwindow.ui
 
 DISTFILES += \
     TODO \
     TODO
+

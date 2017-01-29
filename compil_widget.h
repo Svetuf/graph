@@ -14,6 +14,7 @@
 #include <QLineEdit>
 #include <QFormLayout>
 #include <QScrollBar>
+#include <QRadioButton>
 #include "buttons.h"
 #include "status.h"
 #include "new_workspace.h"
@@ -38,6 +39,10 @@ private:
     int FOR_ANNEALING_DONT_TOUCH;
     int ITERATIONSG;
     int NMASG;
+    int AINTCOUNT;
+    int ELITEAINT;
+    int ALPHA, BETTA;
+    int ITERATIONS;
 public slots:
     void Dijks();
     void Astar();
@@ -49,6 +54,7 @@ public slots:
     void ostov();
     void chacgeAnnealingNum(int a);
     void Genetic();
+    void aintSlot();
 
     //genetic
     void setIt(QString a){ITERATIONSG = a.toInt(NULL,10);}

@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     sl_menu->setTitle("Сохр./Загр.");
 
     QAction* genetic;
+    QAction* aint;
 
     QAction *dij;
     QAction *astar;
@@ -49,6 +50,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ostov->setText("Минимальный остов графа");
     genetic = new QAction(bar);
     genetic->setText("Генетический алгоритм");
+    aint = new QAction(bar);
+    aint->setText("Муравьиный алгоритм");
 
 
     save_action = new QAction(sl_menu);
@@ -70,6 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(annealing, SIGNAL(triggered(bool)), cmp, SLOT(annealing()));
     QObject::connect(ostov, SIGNAL(triggered(bool)), cmp, SLOT(ostov()));
     QObject::connect(genetic, SIGNAL(triggered(bool)), cmp, SLOT(Genetic()));
+    QObject::connect(aint, SIGNAL(triggered(bool)), cmp, SLOT(aintSlot()));
 
     QObject::connect(save_action, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(save()));
     QObject::connect(load_action, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(load()));
@@ -93,6 +97,7 @@ MainWindow::MainWindow(QWidget *parent) :
     bar->addMenu(menu);
     bar->addMenu(sl_menu);
     bar->addAction(genetic);
+    bar->addAction(aint);
     setMenuBar(bar);
 
     setCentralWidget(cmp);
