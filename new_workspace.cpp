@@ -152,3 +152,9 @@ void new_workspace::genetic(int it, int num)
     Scene->genetic(it, num);
 
 }
+
+
+void new_workspace::aintalgo(int aints, int elitem, int alpha, int betta, int iterations)
+{
+    Scene->aintAlgor(aints,elitem,alpha,betta,iterations);
+}

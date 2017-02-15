@@ -156,6 +156,11 @@ void compil::ostov()
     space->Scene->ostovVoid();
 }
 
+void compil::china()
+{
+    space->Scene->chinaa();
+}
+
 void compil::Genetic()
 {
     ITERATIONSG = 0;
@@ -227,9 +232,17 @@ void compil::aintSlot()
      grid1->addRow(b);
      grid1->addWidget(toclose);
 
+     connect(&aint, SIGNAL(textChanged(QString)), this, SLOT(setAint(QString)));
+     connect(&elite, SIGNAL(textChanged(QString)), this, SLOT(setElite(QString)));
+     connect(&al, SIGNAL(textChanged(QString)), this, SLOT(setAlpha(QString)));
+     connect(&bet, SIGNAL(textChanged(QString)), this, SLOT(setBetta(QString)));
+     connect(&iterations, SIGNAL(textChanged(QString)), this, SLOT(setIterations(QString)));
+     connect(toclose, SIGNAL(clicked(bool)),local_help, SLOT(close()));
+
      local_help->setLayout(grid1);
      local_help->setFixedSize(grid1->sizeHint());
      local_help->show();
      local_help->exec();
 
+     space->aintalgo(AINTCOUNT,ELITEAINT,ALPHA, BETTA, ITERATIONS);
 }

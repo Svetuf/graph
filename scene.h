@@ -10,6 +10,7 @@
 #include <QThread>
 #include <QDebug>
 #include <QTimer>
+#include <QGraphicsEllipseItem>
 #include <QGraphicsSceneMouseEvent>
 #include <math.h>
 #include <QStyleOptionGraphicsItem>
@@ -25,6 +26,8 @@
 #include "ostov.h"
 #include "svyaz.h"
 #include "genetic.h"
+#include "aintalgo.h"
+#include "china.h"
 
 using namespace std;
 
@@ -73,6 +76,8 @@ private:
     Ostov ostov;
     svyaz sv;
     Genetic genA;
+    aintAlgo classAintVar;
+    china kitaets;
     //
 
     Save_Load sl;
@@ -87,6 +92,7 @@ private:
     void reDrawLines();
     void removePoint(point* my_p);
     void drawWay(int start, int end, QVector<int>way);
+    void drawAint(vector<int>mas);
     void sleep(qint64 msec)
     {
         QEventLoop loop;
@@ -119,6 +125,7 @@ public slots:
     void skip();
     void allRemove();
     void ostovVoid();
+    void chinaa();
     void load()
     {
         this->allRemove();
@@ -170,6 +177,7 @@ public slots:
     void save_as(){ sl.save_fr(points,matrix); }
     void genetic(int itera, int n);
     void genCh(int a, vector<int> b){emit gCh(a); sleep(1); draw_so(b) ;}
+    void aintAlgor(int aints, int elitem, int alpha, int betta, int iterations);
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);

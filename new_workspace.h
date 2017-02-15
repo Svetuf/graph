@@ -57,6 +57,7 @@ public slots:
     void get_txt_tm_out(QString & stroka, int timeout);
     void genetic(int it, int num);
     void anealint(int t);
+    void aintalgo(int aints, int elitem, int alpha, int betta, int iterations);
 };
 
 #endif // NEW_WORKSPACE_H

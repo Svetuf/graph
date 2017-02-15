@@ -52,6 +52,7 @@ public slots:
     void salesman();
     void annealing();
     void ostov();
+    void china();
     void chacgeAnnealingNum(int a);
     void Genetic();
     void aintSlot();
@@ -60,6 +61,13 @@ public slots:
     void setIt(QString a){ITERATIONSG = a.toInt(NULL,10);}
     void setnmas(QString a){NMASG = a.toInt(NULL,10);}
 
+    // aint
+
+    void setAint(QString a){AINTCOUNT = a.toInt(NULL,10);}
+    void setElite(QString a){ELITEAINT=  a.toInt(NULL,10);}
+    void setAlpha(QString a){ALPHA = a.toInt(NULL,10);}
+    void setBetta(QString a){BETTA = a.toInt(NULL,10);}
+    void setIterations(QString a){ITERATIONS = a.toInt(NULL,10);}
 };
 
 #endif // COMPIL_WIDGET

@@ -298,6 +298,34 @@ void scena::drawLoops()
     QString toText = "is " + QString::number(count) + " loop's";
     my_bar->setTimeoutText(toText, 5000);
 }
+void scena::drawAint(vector<int> mas)
+{
+    set<pair<int,int>>dab;
+    for(int i = 0; i < mas.size() - 1;i++)
+    {
+        if((dab.find(make_pair(mas[i],mas[i+1])) != dab.end() ) || (dab.find(make_pair(mas[i+1],mas[i])) != dab.end())){
+            QLineF line(points[mas[i]]->scenePos() + QPointF(-10,10),
+                    points[mas[i+1]]->scenePos() + QPointF(-10,10));
+            dab.insert(make_pair(mas[i],mas[i+1]));
+            dab.insert(make_pair(mas[i+1],mas[i]));
+            QPen pen;
+            pen.setWidth(6);
+            pen.setColor(Qt::blue);
+         //   QGraphicsEllipseItem *ellipse = this->addEllipse();
+            dijkstra_lines.push_back(addLine(line,pen));
+        }
+        else{
+            QLineF line(points[mas[i]]->scenePos(), points[mas[i+1]]->scenePos());
+            dab.insert(make_pair(mas[i],mas[i+1]));
+            dab.insert(make_pair(mas[i+1],mas[i]));
+            QPen pen;
+            pen.setWidth(8);
+            pen.setColor(Qt::green);
+            dijkstra_lines.push_back(addLine(line,pen));
+        }
+       sleep(400);
+    }
+}
 
 void scena::drawWay(int start, int end, QVector<int> way)
 {
@@ -471,6 +499,38 @@ void scena::point_pressed(point *this_point)
         emit send_to_permament_status(f);
     }
     return;
+}
+
+void scena::aintAlgor(int aints, int elitem, int alpha, int betta, int iterations)
+{
+    if(points.empty())
+        return;
+    if(!dijkstra_lines.empty()){
+        foreach(auto dline, dijkstra_lines){
+            this->removeItem(dline);
+            delete dline;
+        }
+        dijkstra_lines.clear();
+        foreach(auto p, points){
+            if(p->isSelected()){
+                p->setSelected(false);
+                break;
+            }
+        }
+    }
+    //draw_so(classAintVar.path(points,matrix,alpha,betta,aints,elitem,iterations));
+    vector<int>reshak = classAintVar.path(points,matrix,alpha,betta,aints,elitem,iterations);
+    if(reshak.size() != points.size()){
+        QMessageBox* box= new QMessageBox("Alert","Need more iterations", QMessageBox::Information, NULL, NULL, QMessageBox::Cancel | QMessageBox::Escape);
+          box->exec();
+        return;
+    }
+    drawAint(reshak);
+}
+
+void scena::chinaa()
+{
+    drawAint(kitaets.answerAtQuestion(points.size(),matrix));
 }
 
 void scena::salesman_porblem_replaces()///////////////////////////////////////////////////////////////////////////////////////
