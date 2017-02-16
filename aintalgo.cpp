@@ -80,6 +80,18 @@ vector<int> aintAlgo::path(QList<point *> points, QList<QList<double>>tmr, doubl
     Q = 1;
     p = 0.3;
     MyPoints.clear();
+
+    //clear
+    aints.clear();
+    pointsLocal.clear();
+    tmrLocal.clear();
+    feromon.clear();
+    Deltaferomon.clear();
+    //
+
+
+
+
     //tmrLocal = tmr;
 
     for(int i = 0; i < tmr.size(); i++)
@@ -173,13 +185,16 @@ vector<int> aintAlgo::path(QList<point *> points, QList<QList<double>>tmr, doubl
                 aints[j].Tovisit.removeAt(ffind(aints[j].Tovisit,here));
                 WayToLocalMuravey += tmr[aints[j].iMNow][here];
                 pathToThis.push_back(here);
-                Deltaferomon[aints[j].iMNow][here] += Q / WayToLocalMuravey;
+              //  Deltaferomon[aints[j].iMNow][here] += Q / WayToLocalMuravey;
                 aints[j].iMNow = here;
             }
             if(!ka)
                 continue;
             if(pathToThis.size() != points.size())
                 continue;
+            for(int u = 0; u < pathToThis.size() - 1; u++)
+                Deltaferomon[pathToThis[u]][pathToThis[u+1]] += Q / (tmrLocal[pathToThis[u]][pathToThis[u+1]]);
+
             if(WayToLocalMuravey < GLOBALWEIGHT){
                 GLOBALWEIGHT = WayToLocalMuravey;
                 GlobalSolution = pathToThis;

@@ -298,18 +298,18 @@ void scena::drawLoops()
     QString toText = "is " + QString::number(count) + " loop's";
     my_bar->setTimeoutText(toText, 5000);
 }
-void scena::drawAint(vector<int> mas)
+void scena::drawAint(vector<int> mas, bool kit)
 {
     set<pair<int,int>>dab;
     for(int i = 0; i < mas.size() - 1;i++)
     {
         if((dab.find(make_pair(mas[i],mas[i+1])) != dab.end() ) || (dab.find(make_pair(mas[i+1],mas[i])) != dab.end())){
-            QLineF line(points[mas[i]]->scenePos() + QPointF(-10,10),
-                    points[mas[i+1]]->scenePos() + QPointF(-10,10));
+            QLineF line(points[mas[i]]->scenePos(),
+                    points[mas[i+1]]->scenePos());
             dab.insert(make_pair(mas[i],mas[i+1]));
             dab.insert(make_pair(mas[i+1],mas[i]));
             QPen pen;
-            pen.setWidth(6);
+            pen.setWidth(3);
             pen.setColor(Qt::blue);
          //   QGraphicsEllipseItem *ellipse = this->addEllipse();
             dijkstra_lines.push_back(addLine(line,pen));
@@ -323,7 +323,8 @@ void scena::drawAint(vector<int> mas)
             pen.setColor(Qt::green);
             dijkstra_lines.push_back(addLine(line,pen));
         }
-       sleep(400);
+       if(kit)
+        sleep(400);
     }
 }
 
@@ -525,12 +526,12 @@ void scena::aintAlgor(int aints, int elitem, int alpha, int betta, int iteration
           box->exec();
         return;
     }
-    drawAint(reshak);
+    drawAint(reshak,false);
 }
 
 void scena::chinaa()
 {
-    drawAint(kitaets.answerAtQuestion(points.size(),matrix));
+    drawAint(kitaets.answerAtQuestion(points.size(),matrix),true);
 }
 
 void scena::salesman_porblem_replaces()///////////////////////////////////////////////////////////////////////////////////////
