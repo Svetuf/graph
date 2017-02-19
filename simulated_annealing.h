@@ -16,7 +16,7 @@
 #define  ll unsigned long long
 #define TEMP_MAX 100000
 #define TEMP_MIN 0.00000000001
-#define K 1.38*pow(10,-23)
+#define K 1.38*pow(10.0,-23)
 using namespace std;
 
 class simulated_annealing : public QObject

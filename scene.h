@@ -2,12 +2,15 @@
 #define SCENE_H
 #include <iostream>
 #include <vector>
+#include <QPushButton>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QWidget>
 #include <QMouseEvent>
 #include <QPoint>
 #include <QThread>
+#include <QFormLayout>
+#include <QTextLayout>
 #include <QDebug>
 #include <QTimer>
 #include <QGraphicsEllipseItem>
@@ -40,6 +43,7 @@ public:
     scena(QGraphicsView *parent);
     void setCursorState(int m);
     void drawLoops();
+    int getPointSize(){return points.size();}
     void dia();
     void setBar(status_bar* bar);
     QList<QList< double >> matrix;
@@ -92,7 +96,7 @@ private:
     void reDrawLines();
     void removePoint(point* my_p);
     void drawWay(int start, int end, QVector<int>way);
-    void drawAint(vector<int>mas);
+    void drawAint(vector<int>mas, bool kit);
     void sleep(qint64 msec)
     {
         QEventLoop loop;
@@ -104,6 +108,11 @@ private:
     int get_num(point* p);
     double n(QPointF a, QPointF b);
     void do_it(point* a);
+
+    //china lostil
+
+    QString pathToSaveDONTTOUCH;
+    QString whatToSaveDONTTOUCH;
 
     double result_way(vector<int>path);
 
@@ -126,6 +135,7 @@ public slots:
     void allRemove();
     void ostovVoid();
     void chinaa();
+    void saveChina();
     void load()
     {
         this->allRemove();

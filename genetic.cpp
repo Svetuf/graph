@@ -89,6 +89,7 @@ vector<int>Genetic::genetic(QList<point *> points, QList<QList<double> > matrix,
     }
     int GCOUNT = n;    // num of individual in generation ::20
     int ITERATIONCONS = it;
+    //GOVNOCODE
     int SHIT = GCOUNT/20; // shit
 
    vector<gene>generation;

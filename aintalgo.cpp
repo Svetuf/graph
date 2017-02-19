@@ -2,7 +2,6 @@
 
 aintAlgo::aintAlgo()
 {
-
 }
 
 double aintAlgo::lambda(aint &ai, int i)

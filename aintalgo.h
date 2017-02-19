@@ -20,6 +20,8 @@
 ///#include "scene.h"
 #define DBL_MAX 1.7976931348623158e+308
 
+const  double tau0 = 3;
+
 using namespace std;
 
 struct aint{
@@ -52,7 +54,7 @@ public:
 
     vector<vector<double>>feromon;
     vector<vector<double>>Deltaferomon;
-    const double tau0 = 3;
+
 
     double lambda(aint &ai, int i);
     int chose_new_visit(aint &ai);

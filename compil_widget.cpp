@@ -158,6 +158,8 @@ void compil::ostov()
 
 void compil::china()
 {
+
+
     space->Scene->chinaa();
 }
 
@@ -218,11 +220,11 @@ void compil::aintSlot()
     local_help->setModal(true);
     local_help->setWindowTitle("settings");
     QFormLayout* grid1 = new QFormLayout();
-    QLineEdit iterations;
-    QLineEdit aint;
-    QLineEdit elite;
-    QLineEdit al;
-    QLineEdit bet;
+    iterations.clear();
+    aint.clear();
+    elite.clear();
+    al.clear();
+    bet.clear();
 
      grid1->addRow(tr("Количество муравьев :"), &aint);
      grid1->addRow(tr("количество элитных муравьев :"), &elite);
@@ -238,6 +240,9 @@ void compil::aintSlot()
      connect(&bet, SIGNAL(textChanged(QString)), this, SLOT(setBetta(QString)));
      connect(&iterations, SIGNAL(textChanged(QString)), this, SLOT(setIterations(QString)));
      connect(toclose, SIGNAL(clicked(bool)),local_help, SLOT(close()));
+     connect(b, SIGNAL(pressed()), this,SLOT(bclicked()));
+    // connect(b,SIGNAL(clicked(true)), this, SLOT(rall()));
+
 
      local_help->setLayout(grid1);
      local_help->setFixedSize(grid1->sizeHint());

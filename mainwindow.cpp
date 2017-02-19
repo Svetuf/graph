@@ -15,11 +15,11 @@ MainWindow::MainWindow(QWidget *parent) :
     sl_menu = new QMenu(this);
     sl_menu->setTitle("Сохр./Загр.");
 
-    //QAction* genetic;
-    //QAction* aint;
+    QAction* genetic;
+    QAction* aint;
 
-    QMenu* genetic;
-    QMenu* aint;
+//    QMenu* genetic;
+//    QMenu* aint;
 
     QAction *dij;
     QAction *astar;
@@ -53,18 +53,18 @@ MainWindow::MainWindow(QWidget *parent) :
     annealing->setText("Имитация отжига (задача посыльного)");
     ostov = new QAction(menu);
     ostov->setText("Минимальный остов графа");
-    china = new QAction(menu);
-    china->setText("china");
-    //genetic = new QAction(bar);
-    genetic = new QMenu(bar);
-    //genetic->setText("Генетический алгоритм");
-    genetic->setTitle("Генетический алгоритм");
+    china = new QAction(bar);
+    china->setText("Задача китайского почтальона");
+    genetic = new QAction(bar);
+//    genetic = new QMenu(bar);
+    genetic->setText("Генетический алгоритм");
+//    genetic->setTitle("Генетический алгоритм");
 
-    //aint = new QAction(bar);
-    aint = new QMenu(bar);
-    //aint->setText("Муравьиный алгоритм");
+    aint = new QAction(bar);
+//    aint = new QMenu(bar);
+    aint->setText("Муравьиный алгоритм");
 
-    aint->setTitle("Муравьиный алгоритм");
+    //aint->setTitle("Муравьиный алгоритм");
     save_action = new QAction(sl_menu);
     save_action->setText("Сохранить");
     save_as_action = new QAction(sl_menu);
@@ -75,24 +75,24 @@ MainWindow::MainWindow(QWidget *parent) :
     load_from_action->setText("Загрузить из...");
 
 
-    QObject::connect(dij, SIGNAL(triggered(bool)), cmp, SLOT(Dijks()));
-    QObject::connect(lps, SIGNAL(triggered(bool)), cmp, SLOT(loops_cnnct()));
-    QObject::connect(astar, SIGNAL(triggered(bool)), cmp, SLOT(Astar()));
-    QObject::connect(diamtr, SIGNAL(triggered(bool)), cmp ,SLOT(diamtr()));
-    QObject::connect(floyd, SIGNAL(triggered(bool)), cmp, SLOT(floyd_w()));
+    QObject::connect(dij,              SIGNAL(triggered(bool)), cmp, SLOT(Dijks()));
+    QObject::connect(lps,              SIGNAL(triggered(bool)), cmp, SLOT(loops_cnnct()));
+    QObject::connect(astar,            SIGNAL(triggered(bool)), cmp, SLOT(Astar()));
+    QObject::connect(diamtr,           SIGNAL(triggered(bool)), cmp ,SLOT(diamtr()));
+    QObject::connect(floyd,            SIGNAL(triggered(bool)), cmp, SLOT(floyd_w()));
     QObject::connect(salesman_replace, SIGNAL(triggered(bool)), cmp, SLOT(salesman()));
-    QObject::connect(annealing, SIGNAL(triggered(bool)), cmp, SLOT(annealing()));
-    QObject::connect(ostov, SIGNAL(triggered(bool)), cmp, SLOT(ostov()));
-    QObject::connect(china, SIGNAL(triggered(bool)), cmp, SLOT(china()));
-    //QObject::connect(genetic, SIGNAL(triggered(bool)), cmp, SLOT(Genetic()));
-  //  QObject::connect(aint, SIGNAL(triggered(bool)), cmp, SLOT(aintSlot()));
+    QObject::connect(annealing,        SIGNAL(triggered(bool)), cmp, SLOT(annealing()));
+    QObject::connect(ostov,            SIGNAL(triggered(bool)), cmp, SLOT(ostov()));
+    QObject::connect(china,            SIGNAL(triggered(bool)), cmp, SLOT(china()));
+    QObject::connect(genetic,          SIGNAL(triggered(bool)), cmp, SLOT(Genetic()));
+    QObject::connect(aint,             SIGNAL(triggered(bool)), cmp, SLOT(aintSlot()));
 
-    QObject::connect(genetic, SIGNAL(aboutToShow()), cmp, SLOT(Genetic()));
-    QObject::connect(aint, SIGNAL(aboutToShow()), cmp, SLOT(aintSlot()));
+//    QObject::connect(genetic, SIGNAL(aboutToShow()), cmp, SLOT(Genetic()));
+//    QObject::connect(aint, SIGNAL(aboutToShow()), cmp, SLOT(aintSlot()));
 
-    QObject::connect(save_action, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(save()));
-    QObject::connect(load_action, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(load()));
-    QObject::connect(save_as_action, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(save_as()));
+    QObject::connect(save_action,      SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(save()));
+    QObject::connect(load_action,      SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(load()));
+    QObject::connect(save_as_action,   SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(save_as()));
     QObject::connect(load_from_action, SIGNAL(triggered(bool)), cmp->space->Scene, SLOT(load_from()));
 
     menu->addAction(dij);
@@ -103,7 +103,7 @@ MainWindow::MainWindow(QWidget *parent) :
     menu->addAction(salesman_replace);
     menu->addAction(annealing);
     menu->addAction(ostov);
-    menu->addAction(china);
+   // menu->addAction(china);
 
     sl_menu->addAction(save_action);
     sl_menu->addAction(save_as_action);
@@ -117,14 +117,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     bar->setVisible(true);
 
-    //bar->addAction(genetic);
-    //bar->addAction(aint);
+    bar->addAction(genetic);
+    bar->addAction(aint);
+    bar->addAction(china);
 
-    bar->addMenu(genetic);
-    bar->addMenu(aint);
+//    bar->addMenu(genetic);
+//    bar->addMenu(aint);
 
-    //genetic->setIconVisibleInMenu(true);
-    //aint->setIconVisibleInMenu(true);
+    genetic->setIconVisibleInMenu(true);
+    aint->setIconVisibleInMenu(true);
+    china->setIconVisibleInMenu(true);
 
     setMenuBar(bar);
 

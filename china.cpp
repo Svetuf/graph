@@ -41,6 +41,7 @@ void fmatr_copy (int n, float **a, float **b)
             a[i][j] = b[i][j];
     return;
 }
+
 float Chinese (int n, float **a, int *deg, int **color)
 {
     // Â ýòîé ôóíêöè ïîäðàçóìåâàåòñÿ, ÷òî n - êîë-âî âåðøèí, a[n][n] - âåñîâàÿ ìàòðèöà (íåñóùåñòâóþùèå ðžáðà ðàâíû íóëþ),
@@ -53,7 +54,10 @@ float Chinese (int n, float **a, int *deg, int **color)
     for (i=0; i<n; i++)
     {
         if (deg[i]%2 != 0) // íå÷žòíàÿ ñòåïåíü âåðøèíû
-        { count++; flag[i] = 1; }
+        {
+            count++;
+            flag[i] = 1;
+        }
         else flag[i] = 0; //÷žòíàÿ ñòåïåíü âåðøèíû
     }
 
@@ -66,6 +70,7 @@ float Chinese (int n, float **a, int *deg, int **color)
     degree = new int[n];
     for (i=0; i<n; i++)
         couleur[i] = new int[n];
+
     matr_copy (n, couleur, color);
     mas_copy (n, degree, deg);
     for (i=0; i<count; i++)
@@ -74,8 +79,7 @@ float Chinese (int n, float **a, int *deg, int **color)
         int **clr, *mas;
         clr = new int*[n];
         mas = new int[n];
-        for (int k=0; k<n; k++)
-            clr[k] = new int[n];
+        for (int k=0; k<n; k++) clr[k] = new int[n];
         matr_copy (n, clr, color);
         mas_copy (n, mas, deg);
         int id = i;
@@ -89,7 +93,8 @@ float Chinese (int n, float **a, int *deg, int **color)
                 float min = 1000000;
                 for (u=0; u<n; u++)
                 {
-                    if (flag[u] == 0 || u == j) continue;
+                    if (
+                            flag[u] == 0 || u == j) continue;
                     float s = way[j][u]; // íàõîäèì êðàò÷àéøåå ðàññòîÿíèå ìåæäó âåðøèíàìè (j, u)
                     if (s < min)
                     { min = s; x = u; }
@@ -120,6 +125,7 @@ float Chinese (int n, float **a, int *deg, int **color)
     mas_copy (n, deg, degree);
     return sum_min;
 }
+
 vector<int> china::answerAtQuestion(int pointCount, QList<QList<double>>matrix)
 {
     vector<int>answEEEr;

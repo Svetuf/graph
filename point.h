@@ -22,6 +22,7 @@ public:
     point();
     point(QPointF point);
 
+    int myNum;
 
 
     bool is_selected_point;
@@ -41,6 +42,8 @@ public:
                  return;
              }
     }
+
+    void setNum(int i){myNum = i; this->update();}
 
 signals:
     void point_is_pressed(point* this_point);

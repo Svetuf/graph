@@ -41,7 +41,18 @@ void point::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
         brush.setColor(Qt::darkBlue);
 
     painter->setBrush(brush);
+
     painter->drawEllipse(boundingRect());
+    brush.setColor(Qt::yellow);
+    pen.setColor(Qt::yellow);
+    pen.setWidth(10);
+    painter->setPen(pen);
+
+    if(myNum >= 100)
+      painter->drawText(QRectF(-10,-10,20,20), QString::number(myNum));
+    else
+        painter->drawText(QRectF(-5,-5,15,15), QString::number(myNum));
+
 }
 
 void 	point::mouseMoveEvent(QGraphicsSceneMouseEvent * event)

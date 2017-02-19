@@ -43,6 +43,11 @@ private:
     int ELITEAINT;
     int ALPHA, BETTA;
     int ITERATIONS;
+    QLineEdit iterations;
+    QLineEdit aint;
+    QLineEdit elite;
+    QLineEdit al;
+    QLineEdit bet;
 public slots:
     void Dijks();
     void Astar();
@@ -68,6 +73,25 @@ public slots:
     void setAlpha(QString a){ALPHA = a.toInt(NULL,10);}
     void setBetta(QString a){BETTA = a.toInt(NULL,10);}
     void setIterations(QString a){ITERATIONS = a.toInt(NULL,10);}
+    void bclicked(){AINTCOUNT = space->Scene->getPointSize();
+                    ELITEAINT = AINTCOUNT * 0.2;
+                    ALPHA = 1;
+                    BETTA = 1;
+                    ITERATIONS = AINTCOUNT*AINTCOUNT;
+                                iterations.setText(QString::number(ITERATIONS));
+                                aint.setText(QString::number(AINTCOUNT));
+                                elite.setText(QString::number(ELITEAINT));
+                                al.setText(QString::number(ALPHA));
+                                bet.setText(QString::number(BETTA));
+                   }
+    void rall(){
+        iterations.clear();
+        aint.clear();
+        elite.clear();
+        al.clear();
+        bet.clear();
+
+    }
 };
 
 #endif // COMPIL_WIDGET

@@ -82,6 +82,9 @@ void scena::addPoints(QPointF position)
         matrix[matrix.size() - 1].push_back(0);
     }
 
+    for(int i = 0; i < points.size(); i++)
+        points[i]->setNum(i);
+
 }
 
 void scena::reDrawLines()
@@ -359,6 +362,8 @@ void scena::minusLine(line_item *line)
     minusLine(get_num(line->p_1), get_num(line->p_2));
     this->removeItem(line->my_text);
     this->removeItem(line);
+    for(int i = 0; i < points.size(); i++)
+        points[i]->setNum(i);
     for(int i = 0; i < lines.size(); i++)
         if(lines[i] == line){
             lines.removeAt(i);
@@ -393,6 +398,9 @@ void scena::removePoint(point* my_p)
     }
     matrix.removeAt(n);
     points.removeAt(n);
+
+    for(int i = 0; i < points.size(); i++)
+        points[i]->setNum(i);
 
 }
 
@@ -531,7 +539,49 @@ void scena::aintAlgor(int aints, int elitem, int alpha, int betta, int iteration
 
 void scena::chinaa()
 {
-    drawAint(kitaets.answerAtQuestion(points.size(),matrix),true);
+
+    vector<int>answer = kitaets.answerAtQuestion(points.size(),matrix);
+
+     QDialog* local_help = new QDialog();
+     local_help->setModal(true);
+     local_help->setWindowTitle("Output");
+     QFormLayout* grid1 = new QFormLayout();
+    QPushButton *but = new QPushButton("Save");
+
+
+    drawAint(answer,true);
+
+    QLabel *ly = new QLabel;
+
+    for(int i = 0; i < answer.size(); i++)
+        ly->setText(ly->text() + " " + QString::number(answer[i]));
+    whatToSaveDONTTOUCH = ly->text();
+    connect(but,SIGNAL(clicked()), this, SLOT(saveChina()));
+    connect(but, SIGNAL(clicked()), local_help, SLOT(close()));
+    grid1->addWidget(ly);
+    grid1->addWidget(but);
+
+    local_help->setLayout(grid1);
+    local_help->setFixedSize(grid1->sizeHint());
+    local_help->show();
+    local_help->exec();
+
+}
+
+void scena::saveChina()
+{
+    QString path = QFileDialog::getSaveFileName();
+    ofstream outfile;
+    outfile.open(path.toStdString() +  ".txt");
+    if(!outfile.is_open()){
+        QMessageBox* box= new QMessageBox("Alert","There is no saved file in main directory", QMessageBox::Information, NULL, NULL, QMessageBox::Cancel | QMessageBox::Escape);
+        box->exec();
+        return;
+    }
+
+    outfile << whatToSaveDONTTOUCH.toStdString();
+    return;
+
 }
 
 void scena::salesman_porblem_replaces()///////////////////////////////////////////////////////////////////////////////////////
