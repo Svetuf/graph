@@ -20,7 +20,7 @@ void scena::addAnealing(vector<int> a)
 {
     //toAnnealing.push_back(a);
     sleep(3);
-    draw_so(a);
+    draw_so(a,1);
 }
 
 void scena::plusLine(point* from, point* to)
@@ -606,7 +606,7 @@ void scena::salesman_porblem_replaces()/////////////////////////////////////////
            box->exec();
          return;
     }
-    draw_so(sale_man.sales_man(points, matrix));
+    draw_so(sale_man.sales_man(points, matrix),0);
 
 }
 
@@ -630,7 +630,7 @@ void scena::genetic(int itera, int n)
         }
     }
 
-    draw_so(genA.genetic(points,matrix,itera, n));
+    draw_so(genA.genetic(points,matrix,itera, n),1);
 }
 
 void scena::point_unpressed(point *this_point)
@@ -648,7 +648,7 @@ void scena::skip()
     }
 }
 
-void scena::draw_so(vector<int> s)
+void scena::draw_so(vector<int> s, bool flag)
 {
 //    for(int i = 0; i < lines.size() ; i++)
 //    {
@@ -694,7 +694,7 @@ void scena::draw_so(vector<int> s)
     dijkstra_lines.push_back(addLine(line,pen));
 
     update();
-    QString _str = "Path = " + QString::number(result_way(s));
+    QString _str = "Path = " + QString::number(result_way(s,flag));
     my_bar->setTimeoutText(_str, 4000);
 }
 
@@ -726,7 +726,7 @@ void scena::annealing_slot(int iterations)
 //        update();
 //    }
     toAnnealing.clear();
-    draw_so(y);
+    draw_so(y,1);
    // disconnect(&so, SIGNAL(situation(vector<int>)), this, SLOT(draw_so(vector<int>)));
     qDebug() << matrix;
    // vector<int> _t = ostov.get_ostov(points,matrix);
@@ -740,7 +740,7 @@ void scena::setBar(status_bar *bar)
     my_bar = bar;
 }
 
-double scena::result_way(vector<int> path)
+double scena::result_way(vector<int> path, bool flag)
 {
     double result = 0;
     for(int i = 0; i < points.size() - 1; i++)
@@ -748,6 +748,11 @@ double scena::result_way(vector<int> path)
         result += sqrt( pow( points[path[i+1]]->scenePos().x() - points[path[i]]->scenePos().x() ,2) +
                         pow( points[path[i+1]]->scenePos().y() - points[path[i]]->scenePos().y() ,2) );
     }
+
+    if(flag)
+        result += sqrt( pow( points[path[0]]->scenePos().x() - points[path[path.size() - 1]]->scenePos().x() ,2) +
+                pow( points[path[0]]->scenePos().y() - points[path[path.size() - 1]]->scenePos().y() ,2) );
+
     return result;
 }
 

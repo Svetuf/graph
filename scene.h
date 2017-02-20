@@ -114,7 +114,7 @@ private:
     QString pathToSaveDONTTOUCH;
     QString whatToSaveDONTTOUCH;
 
-    double result_way(vector<int>path);
+    double result_way(vector<int>path, bool flag);
 
 signals:
 
@@ -123,7 +123,7 @@ signals:
     void gCh(int a);
 
 public slots:
-    void draw_so(vector<int>s);
+    void draw_so(vector<int>s,bool flag);
     void addAnealing(vector<int>a);
     void point_pressed(point* this_point);
     void point_move(point* this_point, QPointF position);
@@ -186,7 +186,7 @@ public slots:
     }
     void save_as(){ sl.save_fr(points,matrix); }
     void genetic(int itera, int n);
-    void genCh(int a, vector<int> b){emit gCh(a); sleep(1); draw_so(b) ;}
+    void genCh(int a, vector<int> b){emit gCh(a); sleep(1); draw_so(b,1) ;}
     void aintAlgor(int aints, int elitem, int alpha, int betta, int iterations);
 
 protected:
